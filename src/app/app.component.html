@@ -17,30 +17,6 @@
     </mat-selection-list>
   </mat-drawer>
   <mat-drawer-content>
-    <mat-card class="container">
-      <mat-card-title>
-        Starting parameters
-      </mat-card-title>
-      <mat-grid-list cols="4" rowHeight="100px">
-        <mat-grid-tile>
-          <mat-form-field>
-            <mat-label>Select starting file</mat-label>
-            <ngx-mat-file-input (change)="onFileSelected()" [formControl]="fileInput" color="accent" [accept]="'.txt,.csv,.tsv,.tab'">
-              <mat-icon ngxMatFileInputIcon>folder</mat-icon>
-            </ngx-mat-file-input>
-          </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <mat-form-field *ngIf="df.count() > 0">
-            <mat-label>Primary ID</mat-label>
-            <mat-select multiple>
-              <mat-option *ngFor="let col of df.getColumnNames()">
-                {{col}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-      </mat-grid-list>
-    </mat-card>
+    <app-starter></app-starter>
   </mat-drawer-content>
 </mat-drawer-container>

@@ -15,11 +15,13 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatListModule} from "@angular/material/list";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import { FilterColumnComponent } from './components/blocks/filter-column/filter-column.component';
+import { StarterComponent } from './components/starter/starter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FilterColumnComponent
+    FilterColumnComponent,
+    StarterComponent
   ],
   imports: [
     BrowserModule,
