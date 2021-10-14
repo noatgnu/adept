@@ -42,7 +42,12 @@
       <th mat-header-cell *matHeaderCellDef>Sample condition</th>
       <td mat-cell *matCellDef="let r">
         <mat-form-field>
-          <input matInput [(ngModel)]="r.condition">
+          <input type="text" matInput [(ngModel)]="r.condition" [matAutocomplete]="auto" (focusout)="updateConditionList()">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of conditionList" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
       </td>
     </ng-container>

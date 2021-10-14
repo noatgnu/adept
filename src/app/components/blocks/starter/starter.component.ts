@@ -1,6 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {DataFrame, fromCSV, IDataFrame} from "data-forge";
 import {FormControl, Validators} from "@angular/forms";
+import {Observable} from "rxjs";
+import {Experiment} from "../../../classes/settings";
+import {SettingsService} from "../../../services/settings.service";
 
 @Component({
     selector: 'app-starter',
@@ -13,13 +16,27 @@ export class StarterComponent implements OnInit {
   df: IDataFrame = new DataFrame()
   primaryIdColumns: string[] = []
   sampleColumns: string[] = []
-  sampleData: any = []
-  constructor() {
+  sampleData: Experiment[] = []
+  conditionList: string[] = [];
+
+  constructor(private settings: SettingsService) {
     this.fileInput = new FormControl(Validators.required);
   }
 
   ngOnInit(): void {
+
   }
+
+  updateConditionList() {
+    for (const c of this.sampleData) {
+      if (c.name !== c.condition) {
+        if (!(this.conditionList.includes(c.condition))) {
+          this.conditionList.push(c.condition)
+        }
+      }
+    }
+  }
+
   onFileSelected() {
     if (typeof (FileReader) !== 'undefined') {
       const reader = new FileReader();
@@ -32,7 +49,6 @@ export class StarterComponent implements OnInit {
   }
 
   setSampleData() {
-
     for (const c of this.sampleColumns) {
       this.sampleData.push({name: c, condition: c})
     }
@@ -40,6 +56,8 @@ export class StarterComponent implements OnInit {
   }
 
   submitStartingBlock() {
+    this.settings.settings.experiments = this.sampleData
+    this.settings.settings.starterFileColumns = this.df.getColumnNames()
     console.log(this.sampleData)
   }
 }

@@ -15,9 +15,10 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatListModule} from "@angular/material/list";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import { FilterColumnComponent } from './components/blocks/filter-column/filter-column.component';
-import { StarterComponent } from './components/starter/starter.component';
+import { StarterComponent } from './components/blocks/starter/starter.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatInputModule} from "@angular/material/input";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import {MatInputModule} from "@angular/material/input";
     MatListModule,
     MatToolbarModule,
     MatTableModule,
-    MatInputModule
+    MatInputModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]
