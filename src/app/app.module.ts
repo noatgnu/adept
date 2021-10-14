@@ -16,6 +16,8 @@ import {MatListModule} from "@angular/material/list";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import { FilterColumnComponent } from './components/blocks/filter-column/filter-column.component';
 import { StarterComponent } from './components/starter/starter.component';
+import {MatTableModule} from "@angular/material/table";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { StarterComponent } from './components/starter/starter.component';
     MatSelectModule,
     MatGridListModule,
     MatListModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatTableModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,26 +1,53 @@
 <mat-card class="container">
-    <mat-card-title>
-        Starting parameters
-    </mat-card-title>
-    <mat-grid-list cols="4" rowHeight="100px">
-        <mat-grid-tile>
-            <mat-form-field>
-                <mat-label>Select starting file</mat-label>
-                <ngx-mat-file-input (change)="onFileSelected()" [formControl]="fileInput" color="accent"
-                                    [accept]="'.txt,.csv,.tsv,.tab'">
-                    <mat-icon ngxMatFileInputIcon>folder</mat-icon>
-                </ngx-mat-file-input>
-            </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <mat-form-field *ngIf="df.count() > 0">
-                <mat-label>Primary ID</mat-label>
-                <mat-select multiple>
-                    <mat-option *ngFor="let col of df.getColumnNames()">
-                        {{col}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </mat-grid-tile>
-    </mat-grid-list>
+  <mat-card-title>
+      Starting parameters
+  </mat-card-title>
+  <mat-grid-list cols="4" rowHeight="100px">
+      <mat-grid-tile>
+          <mat-form-field>
+              <mat-label>Select starting file</mat-label>
+              <ngx-mat-file-input (change)="onFileSelected()" [formControl]="fileInput" color="accent"
+                                  [accept]="'.txt,.csv,.tsv,.tab'">
+                  <mat-icon ngxMatFileInputIcon>folder</mat-icon>
+              </ngx-mat-file-input>
+          </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+          <mat-form-field *ngIf="df.count() > 0">
+              <mat-label>Primary ID</mat-label>
+              <mat-select multiple [(ngModel)]="primaryIdColumns">
+                  <mat-option *ngFor="let col of df.getColumnNames()">
+                      {{col}}
+                  </mat-option>
+              </mat-select>
+          </mat-form-field>
+      </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field *ngIf="df.count() > 0">
+        <mat-label>Sample columns</mat-label>
+        <mat-select multiple [(ngModel)]="sampleColumns" (closed)="setSampleData()">
+          <mat-option *ngFor="let col of df.getColumnNames()" [value]="col">
+            {{col}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <table mat-table [dataSource]="sampleData" class="mat-elevation-z8" *ngIf="sampleData.length > 0" style="margin-left: auto; margin-right: auto">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Sample column name</th>
+      <td mat-cell *matCellDef="let r">{{r.name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="condition">
+      <th mat-header-cell *matHeaderCellDef>Sample condition</th>
+      <td mat-cell *matCellDef="let r">
+        <mat-form-field>
+          <input matInput [(ngModel)]="r.condition">
+        </mat-form-field>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['name', 'condition']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name', 'condition'];"></tr>
+  </table>
+  <button mat-raised-button color="primary" *ngIf="sampleData.length > 0" (click)="submitStartingBlock()" style="margin-top: 10px">Submit</button>
 </mat-card>
