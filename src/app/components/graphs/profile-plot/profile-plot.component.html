@@ -1,0 +1,12 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Profile Plot</mat-card-title>
+  </mat-card-header>
+  <google-chart [type]="chartType" [data]="result" [options]="options" [height]="450" [width]="450" style="margin-left: auto; margin-right: auto"></google-chart>
+  <mat-card-actions>
+    <mat-slide-toggle color="primary" [(ngModel)]="log10Transform" (change)="drawData()">
+      Log10 transform data
+    </mat-slide-toggle>
+  </mat-card-actions>
+</mat-card>
+

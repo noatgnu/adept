@@ -1,0 +1,5 @@
+<button mat-raised-button color="accent" *ngIf="id !== 0 && settings.settings.blockMap[id].completed" [matMenuTriggerFor]="menuGraph"><mat-icon>addchart</mat-icon></button>
+
+<mat-menu #menuGraph="matMenu">
+  <button mat-menu-item (click)="addPlot('Profile Plot')">Profile Plot</button>
+</mat-menu>

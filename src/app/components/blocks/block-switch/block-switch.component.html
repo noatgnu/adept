@@ -1,0 +1,9 @@
+<div [ngSwitch]="block.title">
+  <app-starter [id]="block.id" *ngSwitchCase="'Starting Data'"></app-starter>
+</div>
+
+<div *ngIf="graphs.length > 0">
+  <div [ngSwitch]="g" *ngFor="let g of graphs" style="margin-left: 10px; max-width: 500px">
+    <app-profile-plot *ngSwitchCase="'Profile Plot'"></app-profile-plot>
+  </div>
+</div>
