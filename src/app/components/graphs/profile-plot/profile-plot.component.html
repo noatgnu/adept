@@ -2,11 +2,13 @@
   <mat-card-header>
     <mat-card-title>Profile Plot</mat-card-title>
   </mat-card-header>
-  <google-chart [type]="chartType" [data]="result" [options]="options" [height]="450" [width]="450" style="margin-left: auto; margin-right: auto"></google-chart>
+  <google-chart (ready)="allReady()" [id]="_blockId+'profile_plot'" #editable [type]="chartType" [data]="result" [options]="options" [height]="450" [width]="450" style="margin-left: auto; margin-right: auto"></google-chart>
   <mat-card-actions>
+    <button mat-button (click)="download()" >Download</button>
     <mat-slide-toggle color="primary" [(ngModel)]="log10Transform" (change)="drawData()">
       Log10 transform data
     </mat-slide-toggle>
   </mat-card-actions>
 </mat-card>
 
+<chart-editor></chart-editor>

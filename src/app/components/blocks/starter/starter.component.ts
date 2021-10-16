@@ -16,7 +16,7 @@ import {DataService} from "../../../services/data.service";
 })
 export class StarterComponent implements OnInit {
   @ViewChild('table') table: MatTable<Experiment>|undefined;
-  @Input() id: number = 0
+  @Input() blockID: number = 0
   file: File|undefined;
   fileInput: FormControl;
   df: IDataFrame = new DataFrame()
@@ -70,7 +70,7 @@ export class StarterComponent implements OnInit {
   }
 
   submitStartingBlock() {
-    this.settings.settings.blockMap[this.id].completed = false
+    this.settings.settings.blockMap[this.blockID].completed = false
     this.submittedQuery = true
     this.settings.settings.primaryIDColumns = this.primaryIdColumns
     this.settings.settings.experiments = this.sampleData
@@ -81,9 +81,9 @@ export class StarterComponent implements OnInit {
         this.ws.sendStarter(this.rawData)
       } else if (data["origin"] == "upload-starter") {
         this.submittedQuery = false
-        this.settings.settings.blockMap[this.id].completed = true
+        this.settings.settings.blockMap[this.blockID].completed = true
         this.data.currentDF = fromCSV(<string>data["data"])
-        this.data.dfMap[this.id] = this.data.currentDF
+        this.data.dfMap[this.blockID] = this.data.currentDF
         this.getID?.unsubscribe()
       }
     })

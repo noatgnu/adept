@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {ChartType, Column} from "angular-google-charts";
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ChartBase, ChartEditorComponent, ChartType, Column} from "angular-google-charts";
 import {DataService} from "../../../services/data.service";
 import {SettingsService} from "../../../services/settings.service";
 import {WebsocketService} from "../../../services/websocket.service";
@@ -11,6 +11,34 @@ import {DataFrame, IDataFrame} from "data-forge";
   styleUrls: ['./profile-plot.component.css']
 })
 export class ProfilePlotComponent implements OnInit {
+  @ViewChild(ChartEditorComponent)
+  public readonly editor: ChartEditorComponent| undefined;
+
+  public editChart(chart: ChartBase) {
+    if (this.editor) {
+      this.editor
+        .editChart(chart)
+        .afterClosed()
+        .subscribe(result => {
+          if (result) {
+            console.log(result)
+            // Saved
+          } else {
+            // Cancelled
+          }
+        });
+    }
+  }
+  element: HTMLElement|null|undefined;
+  _blockId: number = 0;
+  @Input() set blockId (value:number) {
+    this._blockId = value
+    if (this._blockId !== 0) {
+      this.df = this.data.dfMap[this._blockId]
+      this.drawData()
+    }
+  }
+
   log10Transform: boolean = false;
   chartType = ChartType.LineChart
   result: any[] = []
@@ -25,8 +53,7 @@ export class ProfilePlotComponent implements OnInit {
   }
   df: IDataFrame = new DataFrame()
   constructor(private data: DataService, private settings: SettingsService, private ws: WebsocketService) {
-    this.df = this.data.currentDF
-    this.drawData()
+
   }
 
   drawData() {
@@ -57,4 +84,23 @@ export class ProfilePlotComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  allReady() {
+    this.element = document.getElementById(this._blockId+"profile_plot")
+  }
+
+  download() {
+    if (this.element) {
+      const svgElement = this.element.getElementsByTagName('svg')[0]
+      svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      const svgData = svgElement.outerHTML;
+      const preface = '<?xml version="1.0" standalone="no"?>\r\n';
+
+      const b = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"})
+      var svgUrl = URL.createObjectURL(b);
+      var downloadLink = document.createElement("a");
+      downloadLink.href = svgUrl;
+      downloadLink.download = "profilePlot.svg";
+      downloadLink.click();
+    }
+  }
 }
