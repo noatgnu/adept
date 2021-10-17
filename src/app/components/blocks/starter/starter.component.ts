@@ -16,7 +16,13 @@ import {DataService} from "../../../services/data.service";
 })
 export class StarterComponent implements OnInit {
   @ViewChild('table') table: MatTable<Experiment>|undefined;
-  @Input() blockID: number = 0
+  _blockID: number = 0
+  @Input() set blockID(value: number) {
+    this._blockID = value
+  }
+  get blockID(): number {
+    return this._blockID
+  }
   file: File|undefined;
   fileInput: FormControl;
   df: IDataFrame = new DataFrame()

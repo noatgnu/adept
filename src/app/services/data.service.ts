@@ -11,4 +11,21 @@ export class DataService {
   dfMap: any = {}
 
   constructor() { }
+
+  downloadData(data: string) {
+    const blob = new Blob([data], {type: 'text/csv'})
+    const url = window.URL.createObjectURL(blob);
+
+    if (typeof(navigator.msSaveOrOpenBlob)==="function") {
+      navigator.msSaveBlob(blob, "data.csv")
+    } else {
+      const a = document.createElement("a")
+      a.href = url
+      a.download = "data.csv"
+      document.body.appendChild(a)
+      a.click();
+      document.body.removeChild(a);
+    }
+    window.URL.revokeObjectURL(url)
+  }
 }

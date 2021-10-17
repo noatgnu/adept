@@ -19,9 +19,18 @@ export class AppComponent {
       console.log(data)
     })
     this.settings.settings.blockMap[1] = {completed: false}
+    this.settings.settings.blocks = [{id: 1, title: "Starting Data", active: true, completed: false}]
   }
 
-  blockList: Block[] = [{id: 1, title: "Starting Data", active: true, completed: false}]
+  addBlock(blockTitle: string) {
+    const lastBlock = this.settings.settings.blocks[this.settings.settings.blocks.length-1]
+    const lastId = lastBlock.id
+    lastBlock.active = false
+    const block = {id: lastId+1, title: blockTitle, active: true, completed: false}
+    this.settings.settings.blockMap[lastId+1] = block
+    this.settings.settings.blocks.push(block)
+
+  }
 
 
   toggleSideNav() {

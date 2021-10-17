@@ -25,6 +25,15 @@ export class WebsocketService {
   sendStarter(data: string) {
     this.ws.next(new WebSocketMessageEvent( "upload-starter",  data, "", JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
   }
+
+  imputeData(method: string, parameters: any) {
+
+    this.ws.next(new WebSocketMessageEvent(method, JSON.stringify(parameters), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
+  }
+
+  normalizeData(method: string) {
+    this.ws.next(new WebSocketMessageEvent("Normalization", method, "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
+  }
 }
 
 export class WebSocketMessageEvent {

@@ -1,11 +1,13 @@
 <div [ngSwitch]="block.title">
   <app-starter [blockID]="block.id" *ngSwitchCase="'Starting Data'"></app-starter>
+  <app-imputation [blockID]="block.id" *ngSwitchCase="'Imputation'"></app-imputation>
+  <app-normalize [blockID]="block.id" *ngSwitchCase="'Normalization'"></app-normalize>
 </div>
 
-<div *ngIf="graphs.length > 0">
-  <div [ngSwitch]="g" *ngFor="let g of graphs" style="margin-left: 10px; max-width: 500px">
-    <div *ngIf="block.id !== 0" >
-      <app-profile-plot *ngSwitchCase="'Profile Plot'" [blockId]="block.id" ></app-profile-plot>
-    </div>
-  </div>
-</div>
+<mat-grid-list cols="2" *ngIf="graphs.length > 0">
+  <mat-grid-tile [ngSwitch]="g" *ngFor="let g of graphs">
+    <app-profile-plot *ngSwitchCase="'Profile Plot'" [blockID]="block.id"></app-profile-plot>
+    <app-box-plot *ngSwitchCase="'Box Plot'" [blockID]="block.id"></app-box-plot>
+  </mat-grid-tile>
+</mat-grid-list>
+<mat-divider></mat-divider>

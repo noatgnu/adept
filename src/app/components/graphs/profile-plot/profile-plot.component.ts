@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {ChartBase, ChartEditorComponent, ChartType, Column} from "angular-google-charts";
 import {DataService} from "../../../services/data.service";
 import {SettingsService} from "../../../services/settings.service";
 import {WebsocketService} from "../../../services/websocket.service";
 import {DataFrame, IDataFrame} from "data-forge";
+import {PlotlyService} from "angular-plotly.js";
 
 @Component({
   selector: 'app-profile-plot',
@@ -11,96 +11,84 @@ import {DataFrame, IDataFrame} from "data-forge";
   styleUrls: ['./profile-plot.component.css']
 })
 export class ProfilePlotComponent implements OnInit {
-  @ViewChild(ChartEditorComponent)
-  public readonly editor: ChartEditorComponent| undefined;
 
-  public editChart(chart: ChartBase) {
-    if (this.editor) {
-      this.editor
-        .editChart(chart)
-        .afterClosed()
-        .subscribe(result => {
-          if (result) {
-            console.log(result)
-            // Saved
-          } else {
-            // Cancelled
-          }
-        });
-    }
-  }
   element: HTMLElement|null|undefined;
-  _blockId: number = 0;
-  @Input() set blockId (value:number) {
-    this._blockId = value
-    if (this._blockId !== 0) {
-      this.df = this.data.dfMap[this._blockId]
+  _blockID: number = 0;
+  @Input() set blockID (value:number) {
+    this._blockID = value
+    if (this._blockID !== 0) {
+      this.df = this.data.dfMap[this._blockID]
       this.drawData()
     }
   }
 
   log10Transform: boolean = false;
-  chartType = ChartType.LineChart
+
   result: any[] = []
-  chartColumns: Column[] = [{label: "Samples", type: "string"}]
-  options: any = {
-    legend:{position:'none'},
-    hAxis: {
-      showTextEvery: 1,
-      slantedText: true,
-      slantedTextAngle: 90
-    },
-  }
+  layout: any = {height: 450, width:450}
   df: IDataFrame = new DataFrame()
-  constructor(private data: DataService, private settings: SettingsService, private ws: WebsocketService) {
+  constructor(private data: DataService, private settings: SettingsService, private ws: WebsocketService, private plotly: PlotlyService) {
 
   }
 
   drawData() {
     this.result = []
-    this.chartColumns = [{label: "Samples", type: "string"}]
-    for (let i = 0; i < this.df.count(); i ++) {
-      this.chartColumns.push({type: 'number'})
-    }
-
-    for (let i = 0; this.settings.settings.experiments.length > i; i ++) {
-      if (this.result.length < i+1) {
-        this.result.push([this.settings.settings.experiments[i].name])
+    const box: any = {}
+    for (const r of this.df) {
+      let primaryIDList = []
+      for (const c of this.settings.settings.primaryIDColumns) {
+        primaryIDList.push(r[c])
       }
-      for (const b of this.df.getSeries(this.settings.settings.experiments[i].name).bake().toArray()) {
-        if (b !== "") {
-          if (this.log10Transform) {
-            this.result[i].push(Math.log10(parseFloat(b)))
-          } else {
-            this.result[i].push(parseFloat(b))
-          }
-        } else {
-          this.result[i].push(null)
+      const primaryID = primaryIDList.join(";")
+      const temp: any = {
+        x: [],
+        y: [],
+        mode: "lines",
+        name: primaryID,
+        showlegend: false,
+        line: {
+          color: "rgba(71,71,71,0.1)"
         }
       }
+      for (const c of this.settings.settings.experiments) {
+
+        if (r[c.name] !== null) {
+          if (!(c.name in box)) {
+            box[c.name] = {
+              y: [],
+              type: "box",
+              name: c.name,
+              boxpoints: false,
+              marker: {
+                color: "black"
+              },
+              showlegend: false
+            }
+          }
+
+          if (this.log10Transform) {
+            box[c.name].y.push(Math.log10(r[c.name]))
+            temp.y.push(Math.log10(r[c.name]))
+          } else {
+            box[c.name].y.push(r[c.name])
+            temp.y.push(r[c.name])
+          }
+          temp.x.push(c.name)
+        }
+      }
+      this.result.push(temp)
+    }
+    for (const c in box) {
+      this.result.push(box[c])
     }
   }
 
   ngOnInit(): void {
   }
 
-  allReady() {
-    this.element = document.getElementById(this._blockId+"profile_plot")
-  }
-
-  download() {
-    if (this.element) {
-      const svgElement = this.element.getElementsByTagName('svg')[0]
-      svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-      const svgData = svgElement.outerHTML;
-      const preface = '<?xml version="1.0" standalone="no"?>\r\n';
-
-      const b = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"})
-      var svgUrl = URL.createObjectURL(b);
-      var downloadLink = document.createElement("a");
-      downloadLink.href = svgUrl;
-      downloadLink.download = "profilePlot.svg";
-      downloadLink.click();
-    }
+  async download(format: string = "svg") {
+    const graph = this.plotly.getInstanceByDivId(this._blockID + "profile_plot");
+    const p = await this.plotly.getPlotly();
+    await p.downloadImage(graph, {format: format, filename: "image"})
   }
 }

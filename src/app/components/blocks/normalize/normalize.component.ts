@@ -1,0 +1,71 @@
+import {Component, Input, OnInit} from '@angular/core';
+import {SettingsService} from "../../../services/settings.service";
+import {WebsocketService} from "../../../services/websocket.service";
+import {DataService} from "../../../services/data.service";
+import {DataFrame, fromCSV, IDataFrame} from "data-forge";
+import {Experiment} from "../../../classes/settings";
+
+@Component({
+  selector: 'app-normalize',
+  templateUrl: './normalize.component.html',
+  styleUrls: ['./normalize.component.css']
+})
+export class NormalizeComponent implements OnInit {
+  _blockID: number = 0
+  @Input() set blockID(value: number) {
+    this._blockID = value
+  }
+  get blockID(): number {
+    return this._blockID
+  }
+  methods: string[] = ["Mean", "Median", "Z-Score Row", "Z-Score Column"]
+  description: any = {
+    "Mean": "Perform normalization to center data around sample's mean",
+    "Median": "Perform normalization to center data around sample's median",
+    "Z-Score Row": "Perform normalization row-wise. Firstly, rows are normalized by their mean then divided by their standard deviation",
+    "Z-Score Column": "Perform normalization column-wise. Firstly, columns are normalized by their mean then divided by their standard deviation",
+  }
+  choosenMethod = "Median"
+  submittedQuery = false
+  result: IDataFrame = new DataFrame()
+  before: any = {}
+  after: any = {}
+  experiments: Experiment[] = []
+  constructor(public settings: SettingsService, private ws: WebsocketService, private data: DataService) { }
+
+  ngOnInit(): void {
+  }
+
+  normalizeData() {
+    const ws = this.ws.ws.subscribe(data => {
+      this.submittedQuery = false
+      this.settings.settings.blockMap[this.blockID].completed = true
+      this.data.dfMap[this.blockID] = fromCSV(<string>data["data"])
+      this.data.currentDF = this.data.dfMap[this.blockID]
+      this.result = this.data.dfMap[this.blockID]
+      this.experiments = this.settings.settings.experiments
+      for (const c of this.experiments) {
+        const col = this.data.dfMap[this.blockID-1].getSeries(c.name).bake()
+        this.before[c.name] = {}
+        this.after[c.name] = {}
+        this.before[c.name]["mean"] = col.average()
+        this.before[c.name]["median"] = col.median()
+        this.before[c.name]["max"] = col.max()
+        this.before[c.name]["min"] = col.min()
+        const colAfter = this.result.getSeries(c.name).bake()
+        this.after[c.name]["mean"] = colAfter.average()
+        this.after[c.name]["median"] = colAfter.median()
+        this.after[c.name]["max"] = colAfter.max()
+        this.after[c.name]["min"] = colAfter.min()
+
+      }
+      console.log(this.before)
+      console.log(this.after)
+      ws.unsubscribe()
+    })
+    this.submittedQuery = true
+    this.ws.normalizeData(this.choosenMethod)
+  }
+
+  download = this.data.downloadData
+}

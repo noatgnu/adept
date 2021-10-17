@@ -24,11 +24,15 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import { BlockSwitchComponent } from './components/blocks/block-switch/block-switch.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {DragDropModule} from "@angular/cdk/drag-drop";
-import {GoogleChartsModule} from "angular-google-charts";
+import * as PlotlyJS from 'plotly.js-dist-min';
+import { PlotlyModule } from 'angular-plotly.js';
 import { ProfilePlotComponent } from './components/graphs/profile-plot/profile-plot.component';
 import { AddGraphButtonComponent } from './components/add-graph-button/add-graph-button.component';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-
+import { ImputationComponent } from './components/blocks/imputation/imputation.component';
+import { BoxPlotComponent } from './components/graphs/box-plot/box-plot.component';
+import { NormalizeComponent } from './components/blocks/normalize/normalize.component';
+PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +40,10 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
     StarterComponent,
     BlockSwitchComponent,
     ProfilePlotComponent,
-    AddGraphButtonComponent
+    AddGraphButtonComponent,
+    ImputationComponent,
+    BoxPlotComponent,
+    NormalizeComponent
   ],
   imports: [
     BrowserModule,
@@ -60,8 +67,8 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
     MatProgressBarModule,
     MatMenuModule,
     DragDropModule,
-    GoogleChartsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    PlotlyModule
   ],
   providers: [],
   bootstrap: [AppComponent]
