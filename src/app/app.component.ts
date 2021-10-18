@@ -32,6 +32,10 @@ export class AppComponent {
 
   }
 
+  scrollTo(id: number) {
+    const block = document.getElementById(id+"-block-switch")
+    block?.scrollIntoView()
+  }
 
   toggleSideNav() {
     this.opened = !this.opened

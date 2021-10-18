@@ -1,22 +1,13 @@
 <mat-card class="container">
   <mat-card-title>
-    Normalization
+    P-Value Correction
   </mat-card-title>
-  <mat-grid-list cols="3" [rowHeight]="100">
-    <mat-grid-tile>
-      <mat-form-field>
-        <mat-label>Methods</mat-label>
-        <mat-select [(ngModel)]="choosenMethod">
-          <mat-option *ngFor="let m of methods" [value]="m">
-            {{m}}
-          </mat-option>
-        </mat-select>
-        <mat-hint>{{description[choosenMethod]}}</mat-hint>
-      </mat-form-field>
-    </mat-grid-tile>
-  </mat-grid-list>
+  <mat-form-field appearance="fill">
+    <mat-label>P-Value Cutoff</mat-label>
+    <input matInput type="number" [(ngModel)]="pCutOff">
+  </mat-form-field>
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="normalizeData()" style="margin-right: 10px">Submit</button>
+    <button mat-raised-button color="primary" (click)="correctData()" style="margin-right: 10px">Submit</button>
     <app-add-graph-button [id]="blockID" *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"></app-add-graph-button>
     <button mat-raised-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" color="accent" (click)="download(result.toCSV())" style="margin-right: 10px">Download CSV</button>
     <button mat-icon-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"><mat-icon color="primary">check_circle</mat-icon></button>

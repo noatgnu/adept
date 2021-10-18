@@ -46,8 +46,10 @@ export class StarterComponent implements OnInit {
   updateConditionList() {
     for (const c of this.sampleData) {
       if (c.name !== c.condition) {
-        if (!(this.conditionList.includes(c.condition))) {
-          this.conditionList.push(c.condition)
+        if (c.name !== "") {
+          if (!(this.conditionList.includes(c.condition))) {
+            this.conditionList.push(c.condition)
+          }
         }
       }
     }
@@ -88,8 +90,8 @@ export class StarterComponent implements OnInit {
       } else if (data["origin"] == "upload-starter") {
         this.submittedQuery = false
         this.settings.settings.blockMap[this.blockID].completed = true
-        this.data.currentDF = fromCSV(<string>data["data"])
-        this.data.dfMap[this.blockID] = this.data.currentDF
+        this.data.dfMap[this.blockID] = fromCSV(<string>data["data"])
+        this.data.currentDF = this.data.dfMap[this.blockID]
         this.getID?.unsubscribe()
       }
     })

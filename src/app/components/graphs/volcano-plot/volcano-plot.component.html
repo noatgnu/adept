@@ -1,0 +1,17 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Volcano Plot</mat-card-title>
+  </mat-card-header>
+  <plotly-plot [data]="result" [layout]="layout" [updateOnDataChange]="true" [divId]="_blockID+'profile_plot'"></plotly-plot>
+  <mat-card-actions>
+    <button mat-button (click)="download()" >Download</button>
+    <mat-form-field>
+      <mat-label>Comparisons</mat-label>
+      <mat-select [(ngModel)]="chosenComparison" (change)="drawData()">
+        <mat-option *ngFor="let c of comparisons" [value]="c">
+          {{c}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card-actions>
+</mat-card>

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {DataService} from "../../../services/data.service";
 import {SettingsService} from "../../../services/settings.service";
 import {WebsocketService} from "../../../services/websocket.service";
@@ -12,7 +12,6 @@ import {PlotlyService} from "angular-plotly.js";
 })
 export class ProfilePlotComponent implements OnInit {
 
-  element: HTMLElement|null|undefined;
   _blockID: number = 0;
   @Input() set blockID (value:number) {
     this._blockID = value
@@ -47,12 +46,13 @@ export class ProfilePlotComponent implements OnInit {
         name: primaryID,
         showlegend: false,
         line: {
-          color: "rgba(71,71,71,0.1)"
-        }
+          color: "rgba(71,71,71,0.05)"
+        },
       }
       for (const c of this.settings.settings.experiments) {
 
         if (r[c.name] !== null) {
+          const n = parseFloat(r[c.name])
           if (!(c.name in box)) {
             box[c.name] = {
               y: [],
@@ -67,11 +67,21 @@ export class ProfilePlotComponent implements OnInit {
           }
 
           if (this.log10Transform) {
-            box[c.name].y.push(Math.log10(r[c.name]))
-            temp.y.push(Math.log10(r[c.name]))
+            if (n === 0) {
+              box[c.name].y.push(0)
+              temp.y.push(0)
+            } else {
+              if (n > 0) {
+                box[c.name].y.push(Math.log10(n))
+                temp.y.push(Math.log10(n))
+              } else {
+                box[c.name].y.push(-Math.log10(Math.abs(n)))
+                temp.y.push(-Math.log10(Math.abs(n)))
+              }
+            }
           } else {
-            box[c.name].y.push(r[c.name])
-            temp.y.push(r[c.name])
+            box[c.name].y.push(n)
+            temp.y.push(n)
           }
           temp.x.push(c.name)
         }

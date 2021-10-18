@@ -2,12 +2,15 @@
   <app-starter [blockID]="block.id" *ngSwitchCase="'Starting Data'"></app-starter>
   <app-imputation [blockID]="block.id" *ngSwitchCase="'Imputation'"></app-imputation>
   <app-normalize [blockID]="block.id" *ngSwitchCase="'Normalization'"></app-normalize>
+  <app-ttest [blockID]="block.id" *ngSwitchCase="'TTest'"></app-ttest>
+  <app-p-correction [blockID]="block.id" *ngSwitchCase="'P-Correction'"></app-p-correction>
 </div>
 
-<mat-grid-list cols="2" *ngIf="graphs.length > 0">
+<mat-grid-list cols="2" *ngIf="graphs.length > 0" rowHeight="700">
   <mat-grid-tile [ngSwitch]="g" *ngFor="let g of graphs">
     <app-profile-plot *ngSwitchCase="'Profile Plot'" [blockID]="block.id"></app-profile-plot>
     <app-box-plot *ngSwitchCase="'Box Plot'" [blockID]="block.id"></app-box-plot>
+    <app-volcano-plot *ngSwitchCase="'Volcano Plot'" [blockID]="block.id"></app-volcano-plot>
   </mat-grid-tile>
 </mat-grid-list>
 <mat-divider></mat-divider>

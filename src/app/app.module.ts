@@ -32,6 +32,11 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import { ImputationComponent } from './components/blocks/imputation/imputation.component';
 import { BoxPlotComponent } from './components/graphs/box-plot/box-plot.component';
 import { NormalizeComponent } from './components/blocks/normalize/normalize.component';
+import { TtestComponent } from './components/blocks/ttest/ttest.component';
+import {MatExpansionModule} from "@angular/material/expansion";
+import { PCorrectionComponent } from './components/blocks/p-correction/p-correction.component';
+import { VolcanoPlotComponent } from './components/graphs/volcano-plot/volcano-plot.component';
+import { AnovaComponent } from './components/blocks/anova/anova.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
@@ -43,7 +48,11 @@ PlotlyModule.plotlyjs = PlotlyJS;
     AddGraphButtonComponent,
     ImputationComponent,
     BoxPlotComponent,
-    NormalizeComponent
+    NormalizeComponent,
+    TtestComponent,
+    PCorrectionComponent,
+    VolcanoPlotComponent,
+    AnovaComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +77,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     MatMenuModule,
     DragDropModule,
     MatSlideToggleModule,
-    PlotlyModule
+    PlotlyModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

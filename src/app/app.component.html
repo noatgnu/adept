@@ -12,13 +12,13 @@
 <mat-drawer-container class="main-page">
   <mat-drawer mode="side" [(opened)]="opened">
     <mat-selection-list [multiple]="false">
-      <mat-list-option *ngFor="let block of settings.settings.blocks">
+      <mat-list-option *ngFor="let block of settings.settings.blocks" (click)="scrollTo(block.id)">
         {{block.id}}. {{block.title}}
       </mat-list-option>
     </mat-selection-list>
   </mat-drawer>
   <mat-drawer-content>
-    <app-block-switch *ngFor="let b of settings.settings.blocks" [block]="b"></app-block-switch>
+    <app-block-switch id="{{b.id}}-block-switch" *ngFor="let b of settings.settings.blocks" [block]="b"></app-block-switch>
     <button mat-raised-button color="accent" [matMenuTriggerFor]="menu" style="margin-left: 10px; margin-top: 10px"><mat-icon>add</mat-icon></button>
 
   </mat-drawer-content>
@@ -27,5 +27,7 @@
 <mat-menu #menu="matMenu">
   <button mat-menu-item (click)="addBlock('Imputation')">Impute Data</button>
   <button mat-menu-item (click)="addBlock('Normalization')">Normalize Data</button>
+  <button mat-menu-item (click)="addBlock('TTest')">Two Samples T-Test</button>
+  <button mat-menu-item (click)="addBlock('P-Correction')">P-Value Correction</button>
 </mat-menu>
 
