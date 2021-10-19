@@ -1,1 +1,69 @@
-<p>filter-column works!</p>
+<mat-card class="container">
+  <mat-card-title>
+    Filter Data
+  </mat-card-title>
+  <mat-grid-list cols="3" rowHeight="100">
+    <mat-grid-tile *ngIf="columns.length > 0">
+      <mat-form-field>
+        <mat-label>Columns</mat-label>
+        <mat-select [(ngModel)]="chosenColumn">
+          <mat-option *ngFor="let c of columns" [value]="c">
+            {{c}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-label>Operator</mat-label>
+        <mat-select [(ngModel)]="chosenOperator">
+          <mat-option *ngFor="let o of operator">
+            {{o}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-label>Keep or remove</mat-label>
+        <mat-select [(ngModel)]="keepRemove">
+          <mat-option [value]="true">
+            Keep
+          </mat-option>
+          <mat-option [value]="false">
+            Remove
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <button mat-raised-button style="margin-left: 10px" color="accent" (click)="addFilter()">Add Filter</button>
+  <table #table  mat-table [dataSource]="filterSteps" class="mat-elevation-z8" *ngIf="filterSteps.length > 0" style="margin-left: auto; margin-right: auto">
+    <ng-container matColumnDef="column">
+      <th mat-header-cell *matHeaderCellDef>Column Name</th>
+      <td mat-cell *matCellDef="let r">
+        {{r.column}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="operator">
+      <th mat-header-cell *matHeaderCellDef>Operator</th>
+      <td mat-cell *matCellDef="let r">
+        {{r.operator}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="keep">
+      <th mat-header-cell *matHeaderCellDef>Keep</th>
+      <td mat-cell *matCellDef="let r">
+        {{r.keep}}
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['column', 'operator', 'keep']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['column', 'operator', 'keep'];"></tr>
+  </table>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="filterData()" style="margin-right: 10px">Submit</button>
+    <app-add-graph-button [id]="blockID" *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"></app-add-graph-button>
+    <button mat-raised-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" color="accent" (click)="download(result.toCSV())" style="margin-right: 10px">Download CSV</button>
+    <button mat-icon-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"><mat-icon color="primary">check_circle</mat-icon></button>
+  </mat-card-actions>
+</mat-card>

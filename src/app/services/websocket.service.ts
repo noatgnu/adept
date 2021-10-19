@@ -39,9 +39,14 @@ export class WebsocketService {
     this.ws.next(new WebSocketMessageEvent("TTest", JSON.stringify(comparisons), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
   }
 
-  correctData(cutoff: number) {
-    this.ws.next(new WebSocketMessageEvent("P-Correction", cutoff.toString(), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
+  correctData(method: string, cutoff: number) {
+    this.ws.next(new WebSocketMessageEvent(method, cutoff.toString(), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
   }
+
+  anova(conditions: string[]) {
+    this.ws.next(new WebSocketMessageEvent("ANOVA", JSON.stringify(conditions), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
+  }
+
 }
 
 export class WebSocketMessageEvent {

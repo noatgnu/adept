@@ -21,6 +21,22 @@ export class PCorrectionComponent implements OnInit {
   pCutOff: number = 0.05
   result: IDataFrame = new DataFrame()
   submittedQuery: boolean = false;
+  methods: string[] = [
+    "bonferonni", "sidak", "holm-sidak", "holm", "simes-hochberg", "hommel", "fdr_bh", "fdr_by", "fdr_tsbh", "fdr_tsbky"
+  ]
+  chosenMethod: string = "fdr_bh"
+  description: any = {
+    "bonferonni": "one-step correction",
+    "sidak": "one-step correction",
+    "holm-sidak": "step down method using Sidak adjustments",
+    "holm": "step-down method using Bonferroni adjustments",
+    "simes-hochberg": "step-up method  (independent)",
+    "hommel": "closed method based on Simes tests (non-negative)",
+    "fdr_bh": "Benjamini/Hochberg (non-negative)",
+    "fdr_by": "Benjamini/Yekutieli (negative)",
+    "fdr_tsbh": "two stage fdr correction (non-negative)",
+    "fdr_tsbky": "two stage fdr correction (non-negative)"
+  }
   constructor(public settings: SettingsService, private ws: WebsocketService, private data: DataService) {
 
   }
@@ -40,10 +56,13 @@ export class PCorrectionComponent implements OnInit {
       this.result = this.data.dfMap[this.blockID]
       ws.unsubscribe()
     })
-    this.ws.correctData(this.pCutOff)
+    this.ws.correctData(this.chosenMethod, this.pCutOff)
     this.submittedQuery = true
   }
 
   download = this.data.downloadData
 
+  updateParameters() {
+    this.data.updateParametersSubject.next({id: this.blockID, data: {pCutOff: this.pCutOff}, origin: this.blockID})
+  }
 }

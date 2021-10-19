@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {DataFrame, IDataFrame} from "data-forge";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -28,4 +28,6 @@ export class DataService {
     }
     window.URL.revokeObjectURL(url)
   }
+
+  updateParametersSubject: Subject<any> = new Subject<any>()
 }

@@ -39,7 +39,14 @@ export class VolcanoPlotComponent implements OnInit {
   comparisons: string[] = []
   chosenComparison: string = ""
   constructor(private data: DataService, private settings: SettingsService, private ws: WebsocketService, private plotly: PlotlyService) {
-
+    this.data.updateParametersSubject.asObservable().subscribe(data => {
+      if (data["id"] === this.blockID && data["id"] === data["origin"]) {
+        if ("pCutoff" in data["data"]) {
+          this.pCutOff = data["pCutoff"]
+          this.drawData()
+        }
+      }
+    })
   }
 
   drawData() {

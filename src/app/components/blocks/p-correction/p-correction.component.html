@@ -2,10 +2,26 @@
   <mat-card-title>
     P-Value Correction
   </mat-card-title>
-  <mat-form-field appearance="fill">
-    <mat-label>P-Value Cutoff</mat-label>
-    <input matInput type="number" [(ngModel)]="pCutOff">
-  </mat-form-field>
+  <mat-grid-list cols="2" rowHeight="100">
+    <mat-grid-tile>
+      <mat-form-field appearance="fill">
+        <mat-label>P-Value Cutoff</mat-label>
+        <input matInput type="number" [(ngModel)]="pCutOff" (focusout)="updateParameters()">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-label>Methods</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let m of methods" [value]="m">
+            {{methods}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-hint>{{description[chosenMethod]}}</mat-hint>
+    </mat-grid-tile>
+  </mat-grid-list>
+
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="correctData()" style="margin-right: 10px">Submit</button>
     <app-add-graph-button [id]="blockID" *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"></app-add-graph-button>

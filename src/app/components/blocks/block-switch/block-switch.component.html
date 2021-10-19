@@ -4,6 +4,7 @@
   <app-normalize [blockID]="block.id" *ngSwitchCase="'Normalization'"></app-normalize>
   <app-ttest [blockID]="block.id" *ngSwitchCase="'TTest'"></app-ttest>
   <app-p-correction [blockID]="block.id" *ngSwitchCase="'P-Correction'"></app-p-correction>
+  <app-anova [blockID]="block.id" *ngSwitchCase="'ANOVA'"></app-anova>
 </div>
 
 <mat-grid-list cols="2" *ngIf="graphs.length > 0" rowHeight="700">
