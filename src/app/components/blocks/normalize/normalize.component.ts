@@ -39,9 +39,7 @@ export class NormalizeComponent implements OnInit {
   normalizeData() {
     const ws = this.ws.ws.subscribe(data => {
       this.submittedQuery = false
-      this.settings.settings.blockMap[this.blockID].completed = true
-      this.data.dfMap[this.blockID] = fromCSV(<string>data["data"])
-      this.data.currentDF = this.data.dfMap[this.blockID]
+      this.data.updateDataState(this.blockID, data["data"])
       this.result = this.data.dfMap[this.blockID]
       this.experiments = this.settings.settings.experiments
       for (const c of this.experiments) {

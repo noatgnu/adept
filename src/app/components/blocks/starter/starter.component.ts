@@ -89,9 +89,7 @@ export class StarterComponent implements OnInit {
         this.ws.sendStarter(this.rawData)
       } else if (data["origin"] == "upload-starter") {
         this.submittedQuery = false
-        this.settings.settings.blockMap[this.blockID].completed = true
-        this.data.dfMap[this.blockID] = fromCSV(<string>data["data"])
-        this.data.currentDF = this.data.dfMap[this.blockID]
+        this.data.updateDataState(this.blockID, data["data"])
         this.getID?.unsubscribe()
       }
     })

@@ -56,14 +56,11 @@ export class ImputationComponent implements OnInit {
   imputeData() {
     const ws = this.ws.ws.subscribe(data => {
       this.submittedQuery = false
-      this.settings.settings.blockMap[this.blockID].completed = true
-      this.data.currentDF = fromCSV(<string>data["data"])
-      this.data.dfMap[this.blockID] = this.data.currentDF
+      this.data.updateDataState(this.blockID, data["data"])
       this.result = this.data.currentDF
       ws.unsubscribe()
     })
     this.submittedQuery = true
-    console.log(this.parameters[this.choosenMethod])
     this.ws.imputeData(this.choosenMethod, this.parameters[this.choosenMethod])
   }
 

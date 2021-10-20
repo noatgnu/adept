@@ -2,7 +2,7 @@
   <mat-card-title>
     Filter Data
   </mat-card-title>
-  <mat-grid-list cols="3" rowHeight="100">
+  <mat-grid-list cols="5" rowHeight="100">
     <mat-grid-tile *ngIf="columns.length > 0">
       <mat-form-field>
         <mat-label>Columns</mat-label>
@@ -17,8 +17,27 @@
       <mat-form-field>
         <mat-label>Operator</mat-label>
         <mat-select [(ngModel)]="chosenOperator">
-          <mat-option *ngFor="let o of operator">
+          <mat-option *ngFor="let o of operator" [value]="o">
             {{o}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-label>Value</mat-label>
+        <input matInput [(ngModel)]="value">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-label>Value Type</mat-label>
+        <mat-select [(ngModel)]="valueType">
+          <mat-option value="number">
+            number
+          </mat-option>
+          <mat-option value="text">
+            text
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -38,7 +57,13 @@
     </mat-grid-tile>
   </mat-grid-list>
   <button mat-raised-button style="margin-left: 10px" color="accent" (click)="addFilter()">Add Filter</button>
-  <table #table  mat-table [dataSource]="filterSteps" class="mat-elevation-z8" *ngIf="filterSteps.length > 0" style="margin-left: auto; margin-right: auto">
+  <table #filterTable
+    mat-table
+    [dataSource]="filterSteps"
+    class="mat-elevation-z8"
+    *ngIf="filterSteps.length > 0"
+    style="margin-left: auto; margin-right: auto"
+  >
     <ng-container matColumnDef="column">
       <th mat-header-cell *matHeaderCellDef>Column Name</th>
       <td mat-cell *matCellDef="let r">
@@ -51,14 +76,26 @@
         {{r.operator}}
       </td>
     </ng-container>
+    <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef>Value</th>
+      <td mat-cell *matCellDef="let r">
+        {{r.value}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="valueType">
+      <th mat-header-cell *matHeaderCellDef>Value Type</th>
+      <td mat-cell *matCellDef="let r">
+        {{r.valueType}}
+      </td>
+    </ng-container>
     <ng-container matColumnDef="keep">
       <th mat-header-cell *matHeaderCellDef>Keep</th>
       <td mat-cell *matCellDef="let r">
         {{r.keep}}
       </td>
     </ng-container>
-    <tr mat-header-row *matHeaderRowDef="['column', 'operator', 'keep']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['column', 'operator', 'keep'];"></tr>
+    <tr mat-header-row *matHeaderRowDef="['column', 'operator', 'value', 'valueType', 'keep']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['column', 'operator', 'value', 'valueType', 'keep'];"></tr>
   </table>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="filterData()" style="margin-right: 10px">Submit</button>

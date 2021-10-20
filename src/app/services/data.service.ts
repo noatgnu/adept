@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {DataFrame, IDataFrame} from "data-forge";
+import {DataFrame, fromCSV, IDataFrame} from "data-forge";
 import {BehaviorSubject, Subject} from "rxjs";
+import {SettingsService} from "./settings.service";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class DataService {
   addPlotBehaviorSubject: BehaviorSubject<any> = new BehaviorSubject<any>({id:0, plotType:""})
   dfMap: any = {}
 
-  constructor() { }
+  constructor(private settings: SettingsService) { }
 
   downloadData(data: string) {
     const blob = new Blob([data], {type: 'text/csv'})
@@ -30,4 +31,12 @@ export class DataService {
   }
 
   updateParametersSubject: Subject<any> = new Subject<any>()
+
+  updateDataState(id: number, rawData: string) {
+    this.settings.settings.blockMap[id].completed = true
+    this.dfMap[id] = fromCSV(<string>rawData)
+    this.currentDF = this.dfMap[id]
+    this.updateParametersSubject.next({id: id, origin: id})
+    console.log(this.currentDF)
+  }
 }

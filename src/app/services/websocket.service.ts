@@ -47,6 +47,9 @@ export class WebsocketService {
     this.ws.next(new WebSocketMessageEvent("ANOVA", JSON.stringify(conditions), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
   }
 
+  filterData(filterSteps: any) {
+    this.ws.next(new WebSocketMessageEvent("Filter", JSON.stringify(filterSteps), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
+  }
 }
 
 export class WebSocketMessageEvent {
