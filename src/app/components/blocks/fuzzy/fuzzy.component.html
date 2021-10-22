@@ -4,8 +4,11 @@
   </mat-card-title>
   <mat-grid-list cols="4" [rowHeight]="100">
     <mat-grid-tile>
-      <mat-label>Cluster Membership Threshold</mat-label>
-      <input matInput type="number" [(ngModel)]="membershipThreshold">
+      <mat-form-field appearance="fill">
+        <mat-label>Cluster Membership Threshold</mat-label>
+        <input matInput type="number" [(ngModel)]="membershipThreshold">
+      </mat-form-field>
+
     </mat-grid-tile>
   </mat-grid-list>
   <mat-card-actions>
