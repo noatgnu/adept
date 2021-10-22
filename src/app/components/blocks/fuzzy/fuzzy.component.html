@@ -1,0 +1,17 @@
+<mat-card class="container">
+  <mat-card-title>
+    Fuzzy C Mean Clustering
+  </mat-card-title>
+  <mat-grid-list cols="4" [rowHeight]="100">
+    <mat-grid-tile>
+      <mat-label>Cluster Membership Threshold</mat-label>
+      <input matInput type="number" [(ngModel)]="membershipThreshold">
+    </mat-grid-tile>
+  </mat-grid-list>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="fuzzyClusterData()" style="margin-right: 10px">Submit</button>
+    <app-add-graph-button [id]="blockID" *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"></app-add-graph-button>
+    <button mat-raised-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" color="accent" (click)="download(result.toCSV())" style="margin-right: 10px">Download CSV</button>
+    <button mat-icon-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"><mat-icon color="primary">check_circle</mat-icon></button>
+  </mat-card-actions>
+</mat-card>

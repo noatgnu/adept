@@ -21,8 +21,8 @@ export class ImputationComponent implements OnInit {
   choosenMethod: string = "Random Forest"
   parameters: any = {
     "Simple": {
-      "# missing values/condition": 0,
-      "# missing values/row": 0,
+      "# good values/condition": 0,
+      "# good condition/row": 0,
     }, "Left Censored Median": {
       "Down-shift": 0,
       "Width": 0,
@@ -36,7 +36,7 @@ export class ImputationComponent implements OnInit {
 
   description: any = {
     "Simple": "Imputation by removal of row with missing data over the threshold number",
-    "Left Censored Median": "Imputation by replacing missing data with those generated from a dataset of random distribution centered on <i>median - down shift value</i>",
+    "Left Censored Median": "Imputation by replacing missing data with those generated from a dataset of random distribution centered on median - down shift value",
     "Random Forest": "Imputation by replacing missing data with those generated from Random Forest algorithm"
   }
   result: IDataFrame = new DataFrame()

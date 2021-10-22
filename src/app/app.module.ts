@@ -37,6 +37,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import { PCorrectionComponent } from './components/blocks/p-correction/p-correction.component';
 import { VolcanoPlotComponent } from './components/graphs/volcano-plot/volcano-plot.component';
 import { AnovaComponent } from './components/blocks/anova/anova.component';
+import { FuzzyComponent } from './components/blocks/fuzzy/fuzzy.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     TtestComponent,
     PCorrectionComponent,
     VolcanoPlotComponent,
-    AnovaComponent
+    AnovaComponent,
+    FuzzyComponent
   ],
   imports: [
     BrowserModule,

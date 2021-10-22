@@ -6,6 +6,7 @@
   <app-p-correction [blockID]="block.id" *ngSwitchCase="'P-Correction'"></app-p-correction>
   <app-anova [blockID]="block.id" *ngSwitchCase="'ANOVA'"></app-anova>
   <app-filter-column [blockID]="block.id" *ngSwitchCase="'Filter'"></app-filter-column>
+  <app-fuzzy [blockID]="block.id" *ngSwitchCase="'Fuzzy'"></app-fuzzy>
 </div>
 
 <mat-grid-list cols="2" *ngIf="graphs.length > 0" rowHeight="700">

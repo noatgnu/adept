@@ -50,6 +50,10 @@ export class WebsocketService {
   filterData(filterSteps: any) {
     this.ws.next(new WebSocketMessageEvent("Filter", JSON.stringify(filterSteps), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
   }
+
+  fuzzyClusterData(threshold: number) {
+    this.ws.next(new WebSocketMessageEvent("Fuzzy", threshold.toString(), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
+  }
 }
 
 export class WebSocketMessageEvent {
