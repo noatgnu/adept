@@ -10,7 +10,6 @@ import {SettingsService} from "./settings.service";
 })
 export class WebsocketService {
   baseUrl: string = "ws://localhost:8000/rpc"
-  webSocketObs: Observable<any> = new Observable<any>()
   private messsageEvent: Subject<MessageEvent> = new Subject<MessageEvent>();
   ws: WebSocketSubject<WebSocketMessageEvent>;
   constructor(private settings: SettingsService) {

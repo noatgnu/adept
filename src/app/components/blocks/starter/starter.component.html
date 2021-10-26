@@ -65,11 +65,15 @@
   </table>
   <mat-card-actions>
     <button mat-raised-button color="primary" *ngIf="sampleData.length > 0" (click)="submitStartingBlock()" style="margin-right: 10px">Submit</button>
+
     <app-add-graph-button [id]="blockID"></app-add-graph-button>
+    <button mat-raised-button color="primary" *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" (click)="ViewInputData()" style="margin-right: 10px">View Sample Of Input Data</button>
     <button mat-icon-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"><mat-icon color="primary">check_circle</mat-icon></button>
   </mat-card-actions>
   <mat-card-footer>
     <mat-progress-bar mode="query" *ngIf="submittedQuery"></mat-progress-bar>
   </mat-card-footer>
 </mat-card>
+
+
 

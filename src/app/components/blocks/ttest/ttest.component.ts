@@ -1,9 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {SettingsService} from "../../../services/settings.service";
 import {WebsocketService} from "../../../services/websocket.service";
 import {DataService} from "../../../services/data.service";
 import {Experiment} from "../../../classes/settings";
 import {DataFrame, fromCSV, IDataFrame} from "data-forge";
+import {MatTable} from "@angular/material/table";
 
 @Component({
   selector: 'app-ttest',
@@ -12,6 +13,8 @@ import {DataFrame, fromCSV, IDataFrame} from "data-forge";
 })
 export class TtestComponent implements OnInit {
   _blockID: number = 0
+  @ViewChild(MatTable) table: MatTable<any>|undefined;
+
   @Input() set blockID(value: number) {
     this._blockID = value
     this.conditions = []
@@ -44,6 +47,7 @@ export class TtestComponent implements OnInit {
 
   addComparison() {
     this.comparisons.push({A: this.selectedA, B: this.selectedB})
+    this.table?.renderRows()
   }
 
   compareData() {

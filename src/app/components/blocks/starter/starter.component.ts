@@ -102,6 +102,9 @@ export class StarterComponent implements OnInit {
     if (this.table) {
       this.table.renderRows();
     }
+  }
 
+  ViewInputData() {
+    this.data.viewData(this.data.dfMap[1].head(10).bake())
   }
 }

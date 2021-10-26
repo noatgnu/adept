@@ -38,6 +38,9 @@ import { PCorrectionComponent } from './components/blocks/p-correction/p-correct
 import { VolcanoPlotComponent } from './components/graphs/volcano-plot/volcano-plot.component';
 import { AnovaComponent } from './components/blocks/anova/anova.component';
 import { FuzzyComponent } from './components/blocks/fuzzy/fuzzy.component';
+import { SetDfAsCurrentComponent } from './components/blocks/set-df-as-current/set-df-as-current.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { ViewDatatableComponent } from './components/view-datatable/view-datatable.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
@@ -54,34 +57,37 @@ PlotlyModule.plotlyjs = PlotlyJS;
     PCorrectionComponent,
     VolcanoPlotComponent,
     AnovaComponent,
-    FuzzyComponent
+    FuzzyComponent,
+    SetDfAsCurrentComponent,
+    ViewDatatableComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatSidenavModule,
-    MatButtonModule,
-    MatCardModule,
-    NgxMatFileInputModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatSelectModule,
-    MatGridListModule,
-    MatListModule,
-    MatToolbarModule,
-    MatTableModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatChipsModule,
-    MatProgressBarModule,
-    MatMenuModule,
-    DragDropModule,
-    MatSlideToggleModule,
-    PlotlyModule,
-    MatExpansionModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatCardModule,
+        NgxMatFileInputModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatSelectModule,
+        MatGridListModule,
+        MatListModule,
+        MatToolbarModule,
+        MatTableModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatChipsModule,
+        MatProgressBarModule,
+        MatMenuModule,
+        DragDropModule,
+        MatSlideToggleModule,
+        PlotlyModule,
+        MatExpansionModule,
+        MatDialogModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
