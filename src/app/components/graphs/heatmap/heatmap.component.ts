@@ -1,0 +1,116 @@
+import {Component, Input, OnInit} from '@angular/core';
+import {Graph} from "../../../classes/settings";
+import {DataFrame, IDataFrame} from "data-forge";
+import {DataService} from "../../../services/data.service";
+import {SettingsService} from "../../../services/settings.service";
+import {WebsocketService} from "../../../services/websocket.service";
+import {PlotlyService} from "angular-plotly.js";
+
+@Component({
+  selector: 'app-heatmap',
+  templateUrl: './heatmap.component.html',
+  styleUrls: ['./heatmap.component.css']
+})
+export class HeatmapComponent implements OnInit {
+  _blockID: number = 0;
+  set blockID (value:number) {
+    if(value) {
+      this._blockID = value
+      if (this._blockID !== 0) {
+        this.df = this.data.dfMap[this._blockID]
+        this.drawData()
+      }
+    }
+
+  }
+
+  _graph: Graph = {id: 0, name: "", parameters: undefined, parentBlockID: 0}
+
+  @Input() set graph(value: Graph) {
+    this._graph = value
+    if (this._graph.id !== 0) {
+      this.blockID = this._graph.parentBlockID
+      if (Object.keys(this._graph.parameters).length > 0) {
+        this.log10Transform = this._graph.parameters.log10Transform
+      }
+
+    }
+  }
+
+  df: IDataFrame = new DataFrame()
+  log10Transform: boolean = false;
+
+  result: any[] = []
+  layout: any = {height: 450, width:450}
+
+  constructor(private data: DataService, private settings: SettingsService, private ws: WebsocketService, private plotly: PlotlyService) { }
+
+  ngOnInit(): void {
+  }
+
+  clusters: string[] = []
+
+  dataFuzzy: any = {}
+  drawData() {
+    this.result = []
+    this.dataFuzzy = {}
+    const experiments: string[] = []
+    for (const e of this.settings.settings.experiments) {
+      experiments.push(e.name)
+    }
+
+    this.clusters = this.df.getSeries("Cluster").distinct().bake().toArray()
+    const temp: any = {
+      z: [],
+      x: [],
+      y: [],
+      type: 'heatmap',
+    }
+    console.log(experiments)
+    for (const c of this.df.getColumnNames()) {
+      console.log(c)
+      if (experiments.includes(c)) {
+        temp.x.push(c)
+      }
+    }
+
+    for (const r of this.df) {
+      let primaryIDList = []
+      for (const c of this.settings.settings.primaryIDColumns) {
+        primaryIDList.push(r[c])
+      }
+      const primaryID = primaryIDList.join(";")
+      temp.y.push(primaryID)
+      const arr: any[] = []
+      for (const c of temp.x) {
+        if (r[c] !== "") {
+          const n = parseFloat(r[c])
+          if (this.log10Transform) {
+            if (n === 0) {
+              arr.push(0)
+            } else {
+              if (n > 0) {
+                arr.push(Math.log10(n))
+              } else {
+                arr.push(-Math.log10(Math.abs(n)))
+              }
+            }
+          } else {
+            arr.push(n)
+          }
+        } else {
+          arr.push(null)
+        }
+      }
+      temp.z.push(arr)
+    }
+    console.log(temp)
+    this.result = [temp]
+  }
+
+  async download(format: string = "svg") {
+    const graph = this.plotly.getInstanceByDivId(this._blockID + "profile_plot");
+    const p = await this.plotly.getPlotly();
+    await p.downloadImage(graph, {format: format, filename: "image"})
+  }
+}

@@ -44,6 +44,7 @@ import { ViewDatatableComponent } from './components/view-datatable/view-datatab
 import { SavingDataComponent } from './components/saving-data/saving-data.component';
 import { FuzzyPlotComponent } from './components/graphs/fuzzy-plot/fuzzy-plot.component';
 import { PCAPlotComponent } from './components/graphs/pca-plot/pca-plot.component';
+import { HeatmapComponent } from './components/graphs/heatmap/heatmap.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     ViewDatatableComponent,
     SavingDataComponent,
     FuzzyPlotComponent,
-    PCAPlotComponent
+    PCAPlotComponent,
+    HeatmapComponent
   ],
     imports: [
         BrowserModule,

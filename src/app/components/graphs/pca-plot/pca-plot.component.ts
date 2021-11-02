@@ -52,20 +52,73 @@ export class PCAPlotComponent implements OnInit {
   drawData() {
     this.result = []
     const dataPCA: any = {}
-    for (const r of this.df) {
-      if (!(r.Cluster in dataPCA)) {
-        dataPCA[r.Cluster] = {
-          x: [],
-          y: [],
-          type: "scatter",
-          mode: "markers",
-          name: r.Cluster,
-          showlegend: true,
+    const conditionDict: any = {}
+    for (const e of this.settings.settings.experiments) {
+      conditionDict[e.name] = e.condition
+    }
+    if (this.df.getColumnNames().includes("Cluster")) {
+      for (const r of this.df) {
+        if (!(r.Cluster in dataPCA)) {
+          dataPCA[r.Cluster] = {
+            x: [],
+            y: [],
+            type: "scatter",
+            mode: "markers",
+            name: r.Cluster,
+          }
+        }
+        dataPCA[r.Cluster].x.push(r.PC1)
+        dataPCA[r.Cluster].y.push(r.PC2)
+      }
+    } else {
+      const b = this.settings.settings.blocks[this._graph.parentBlockID-1]
+      if ("columns" in b.parameters) {
+        if (b.parameters["columns"]) {
+          const firstCol = this.df.getColumnNames()[0]
+          for (const r of this.df) {
+            if (!(conditionDict[r[firstCol]] in dataPCA)) {
+              dataPCA[conditionDict[r[firstCol]]] = {
+                x: [],
+                y: [],
+                text: [],
+                type: "scatter",
+                mode: "markers",
+                name: conditionDict[r[firstCol]],
+              }
+            }
+            dataPCA[conditionDict[r[firstCol]]].x.push(r.PC1)
+            dataPCA[conditionDict[r[firstCol]]].y.push(r.PC2)
+            dataPCA[conditionDict[r[firstCol]]].text.push(r[firstCol])
+          }
+        } else {
+          const primaryIDList: string[] = []
+          for (const r of this.df) {
+            for (const c of this.settings.settings.primaryIDColumns) {
+              primaryIDList.push(r[c])
+            }
+            const primaryID = primaryIDList.join(";")
+            if (!(primaryID in dataPCA)) {
+              dataPCA[primaryID] = {
+                x: [],
+                y: [],
+                text: [],
+                type: "scatter",
+                mode: "markers",
+                name: primaryID,
+                showlegend: false,
+              }
+            }
+            dataPCA[primaryID].x.push(r.PC1)
+            dataPCA[primaryID].y.push(r.PC2)
+            dataPCA[primaryID].text.push(primaryID)
+          }
+
         }
       }
-      dataPCA[r.Cluster].x.push(r.PC1)
-      dataPCA[r.Cluster].y.push(r.PC2)
+
+
     }
+
     for (const r in dataPCA) {
       this.result.push(dataPCA[r])
     }
