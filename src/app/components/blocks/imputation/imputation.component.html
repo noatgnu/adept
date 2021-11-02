@@ -6,25 +6,26 @@
     <mat-grid-tile>
       <mat-form-field>
         <mat-label>Methods</mat-label>
-        <mat-select [(ngModel)]="choosenMethod">
+        <mat-select [(ngModel)]="chosenMethod">
           <mat-option *ngFor="let m of methods" [value]="m">
             {{m}}
           </mat-option>
         </mat-select>
-        <mat-hint>{{description[choosenMethod]}}</mat-hint>
+        <mat-hint>{{description[chosenMethod]}}</mat-hint>
       </mat-form-field>
     </mat-grid-tile>
     <mat-grid-tile *ngFor="let o of getKey()">
       <mat-form-field appearance="fill">
         <mat-label>{{o}}</mat-label>
-        <input type="number" matInput [(ngModel)]="parameters[choosenMethod][o]">
+        <input type="number" matInput [(ngModel)]="config[chosenMethod][o]">
       </mat-form-field>
     </mat-grid-tile>
   </mat-grid-list>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="imputeData()" style="margin-right: 10px">Submit</button>
+    <button mat-raised-button color="primary" (click)="ViewInputData()" style="margin-right: 10px">View Sample Of Input Data</button>
     <app-add-graph-button [id]="blockID" *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"></app-add-graph-button>
-    <button mat-raised-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" color="accent" (click)="download(result.toCSV())" style="margin-right: 10px">Download CSV</button>
+    <button mat-raised-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" color="accent" (click)="download()" style="margin-right: 10px">Download CSV</button>
     <button mat-icon-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"><mat-icon color="primary">check_circle</mat-icon></button>
   </mat-card-actions>
 </mat-card>

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {SettingsService} from "../../../services/settings.service";
 import {WebsocketService} from "../../../services/websocket.service";
 import {DataService} from "../../../services/data.service";
@@ -14,7 +14,7 @@ import {MatTable} from "@angular/material/table";
 export class TtestComponent implements OnInit {
   _blockID: number = 0
   @ViewChild(MatTable) table: MatTable<any>|undefined;
-
+  @Output() parameters: EventEmitter<any> = new EventEmitter<any>();
   @Input() set blockID(value: number) {
     this._blockID = value
     this.conditions = []
@@ -26,6 +26,10 @@ export class TtestComponent implements OnInit {
         this.conditions.push(e.condition)
       }
     }
+    if (Object.keys(this.settings.settings.blocks[this._blockID-1].parameters).length > 0) {
+      this.comparisons = this.settings.settings.blocks[this._blockID-1].parameters.comparisons
+    }
+
   }
   get blockID(): number {
     return this._blockID
@@ -57,10 +61,17 @@ export class TtestComponent implements OnInit {
       this.result = this.data.dfMap[this.blockID]
       ws.unsubscribe()
     })
+    this.parameters.emit({comparisons: this.comparisons})
     this.ws.ttestData(this.comparisons)
     this.submittedQuery = true
 
   }
 
-  download = this.data.downloadData
+  download() {
+    this.data.downloadData(this.blockID)
+  }
+
+  ViewInputData() {
+    this.data.viewData(this.data.dfMap[this._blockID - 1].head(10).bake())
+  }
 }

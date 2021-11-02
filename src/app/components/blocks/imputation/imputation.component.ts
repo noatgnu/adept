@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SettingsService} from "../../../services/settings.service";
 import {WebsocketService} from "../../../services/websocket.service";
 import {DataFrame, fromCSV, IDataFrame} from "data-forge";
@@ -10,16 +10,21 @@ import {DataService} from "../../../services/data.service";
   styleUrls: ['./imputation.component.css']
 })
 export class ImputationComponent implements OnInit {
+  @Output() parameters: EventEmitter<any> = new EventEmitter<any>()
   _blockID: number = 0
   @Input() set blockID(value: number) {
     this._blockID = value
+    if (Object.keys(this.settings.settings.blocks[this._blockID-1].parameters).length > 0) {
+      this.config = this.settings.settings.blocks[this._blockID-1].parameters.config
+      this.chosenMethod = this.settings.settings.blocks[this._blockID-1].parameters.chosenMethod
+    }
   }
   get blockID(): number {
     return this._blockID
   }
   methods: string[] = ["Simple", "Random Forest", "Left Censored Median"]
-  choosenMethod: string = "Random Forest"
-  parameters: any = {
+  chosenMethod: string = "Random Forest"
+  config: any = {
     "Simple": {
       "# good values/condition": 0,
       "# good condition/row": 0,
@@ -47,7 +52,7 @@ export class ImputationComponent implements OnInit {
 
   getKey() {
     const data = []
-    for (const i in this.parameters[this.choosenMethod]) {
+    for (const i in this.config[this.chosenMethod]) {
       data.push(i)
     }
     return data
@@ -61,8 +66,15 @@ export class ImputationComponent implements OnInit {
       ws.unsubscribe()
     })
     this.submittedQuery = true
-    this.ws.imputeData(this.choosenMethod, this.parameters[this.choosenMethod])
+    this.parameters.emit({chosenMethod: this.chosenMethod, config: this.config[this.chosenMethod]})
+    this.ws.imputeData(this.chosenMethod, this.config[this.chosenMethod])
   }
 
-  download = this.data.downloadData
+  download() {
+    this.data.downloadData(this.blockID)
+  }
+
+  ViewInputData() {
+    this.data.viewData(this.data.dfMap[this._blockID - 1].head(10).bake())
+  }
 }

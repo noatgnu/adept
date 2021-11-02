@@ -7,6 +7,11 @@ export class Settings {
   blocks: Block[] = []
 }
 
+export interface ExportData {
+  settings: Settings
+  data: any
+}
+
 export interface Experiment {
   name: string;
   condition: string;
@@ -19,4 +24,13 @@ export interface Block {
   active?: boolean;
   data?: string;
   originData?: string;
+  graphs: Graph[];
+  parameters: any;
+}
+
+export interface Graph {
+  id: number;
+  name: string;
+  parameters: any;
+  parentBlockID: number;
 }

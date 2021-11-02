@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {DataFrame, IDataFrame} from "data-forge";
 import {SettingsService} from "../../../services/settings.service";
 import {WebsocketService} from "../../../services/websocket.service";
@@ -10,9 +10,15 @@ import {DataService} from "../../../services/data.service";
   styleUrls: ['./fuzzy.component.css']
 })
 export class FuzzyComponent implements OnInit {
+  @Output() parameters: EventEmitter<any> = new EventEmitter<any>()
   _blockID: number = 0
+
   @Input() set blockID(value: number) {
     this._blockID = value
+    if (Object.keys(this.settings.settings.blocks[this._blockID-1].parameters).length > 0) {
+      this.membershipThreshold = this.settings.settings.blocks[this._blockID-1].parameters.membershipThreshold
+    }
+
   }
   get blockID(): number {
     return this._blockID
@@ -39,9 +45,14 @@ export class FuzzyComponent implements OnInit {
       ws.unsubscribe()
     })
     this.submittedQuery = true
+    this.parameters.emit({membershipThreshold: this.membershipThreshold})
     this.ws.fuzzyClusterData(this.membershipThreshold)
   }
 
-  download = this.data.downloadData
-
+  download() {
+    this.data.downloadData(this.blockID)
+  }
+  ViewInputData() {
+    this.data.viewData(this.data.dfMap[this._blockID - 1].head(10).bake())
+  }
 }

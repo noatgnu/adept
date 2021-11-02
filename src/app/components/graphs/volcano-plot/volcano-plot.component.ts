@@ -4,6 +4,7 @@ import {DataService} from "../../../services/data.service";
 import {SettingsService} from "../../../services/settings.service";
 import {WebsocketService} from "../../../services/websocket.service";
 import {PlotlyService} from "angular-plotly.js";
+import {Graph} from "../../../classes/settings";
 
 @Component({
   selector: 'app-volcano-plot',
@@ -13,23 +14,45 @@ import {PlotlyService} from "angular-plotly.js";
 export class VolcanoPlotComponent implements OnInit {
 
   _blockID: number = 0;
-  @Input() set blockID (value:number) {
-    this._blockID = value
-    if (this._blockID !== 0) {
-      this.df = this.data.dfMap[this._blockID]
-      const comparisons = this.df.getSeries("Comparison").bake().toArray()
-      for (const c of comparisons) {
-        if (!this.comparisons.includes(c)) {
-          this.comparisons.push(c)
+  set blockID (value:number) {
+    if (value) {
+      this._blockID = value
+      if (this._blockID !== 0) {
+        this.df = this.data.dfMap[this._blockID]
+        const comparisons = this.df.getSeries("Comparison").bake().toArray()
+        for (const c of comparisons) {
+          if (!this.comparisons.includes(c)) {
+            this.comparisons.push(c)
+          }
         }
+        if (this.chosenComparison === "") {
+          this.chosenComparison = this.comparisons[0]
+        }
+        this.drawData()
       }
-      this.chosenComparison = this.comparisons[0]
-      this.drawData()
     }
   }
 
   get blockID(): number {
     return this._blockID
+  }
+  _graph: Graph = {id: 0, name: "", parameters: undefined, parentBlockID: 0}
+
+  @Input() set graph(value: Graph) {
+    this._graph = value
+    console.log(this._graph)
+    if (this._graph.id !== 0) {
+      if (Object.keys(this._graph.parameters).length > 0) {
+        if ("pCutoff" in this._graph.parameters) {
+          this.pCutOff = this._graph.parameters.pCutOff
+        } else {
+          this.settings.settings.blocks[this._graph.parentBlockID-1].graphs[this._graph.id-1].parameters.pCutOff = this.pCutOff
+        }
+
+        this.chosenComparison = this._graph.parameters.chosenComparison
+      }
+      this.blockID = this._graph.parentBlockID
+    }
   }
 
   result: any[] = []
@@ -43,6 +66,7 @@ export class VolcanoPlotComponent implements OnInit {
       if (data["id"] === this.blockID && data["id"] === data["origin"]) {
         if ("pCutoff" in data["data"]) {
           this.pCutOff = data["pCutoff"]
+          this.settings.settings.blocks[this._graph.parentBlockID-1].graphs[this._graph.id-1].parameters.pCutOff = this.pCutOff
           this.drawData()
         }
       }
@@ -50,6 +74,7 @@ export class VolcanoPlotComponent implements OnInit {
   }
 
   drawData() {
+
     this.result = []
     const temp: any = {}
     for (const r of this.df.where(row => row["Comparison"] === this.chosenComparison).bake()) {
@@ -106,7 +131,9 @@ export class VolcanoPlotComponent implements OnInit {
     for (const t in temp) {
       this.result.push(temp[t])
     }
-
+    if (this.chosenComparison !== "") {
+      this.settings.settings.blocks[this._graph.parentBlockID-1].graphs[this._graph.id-1].parameters.pCutOff = this.pCutOff
+    }
   }
 
   ngOnInit(): void {

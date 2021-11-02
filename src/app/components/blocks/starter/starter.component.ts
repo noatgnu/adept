@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {ApplicationRef, ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {DataFrame, fromCSV, IDataFrame} from "data-forge";
 import {FormControl, Validators} from "@angular/forms";
 import {Observable, Subscription} from "rxjs";
@@ -15,6 +15,12 @@ import {DataService} from "../../../services/data.service";
     styleUrls: ['./starter.component.css']
 })
 export class StarterComponent implements OnInit {
+  get df(): IDataFrame {
+    console.log(this._df)
+    return this._df;
+  }
+
+
   @ViewChild('table') table: MatTable<Experiment>|undefined;
   _blockID: number = 0
   @Input() set blockID(value: number) {
@@ -25,16 +31,25 @@ export class StarterComponent implements OnInit {
   }
   file: File|undefined;
   fileInput: FormControl;
-  df: IDataFrame = new DataFrame()
+  @Input() set df(value: IDataFrame) {
+    this._df = value;
+    this.columns = value.getColumnNames()
+    this.columns = [...this.columns]
+    this.primaryIdColumns = this.settings.settings.primaryIDColumns
+    this.sampleData = this.settings.settings.experiments
+  }
+
+  private _df: IDataFrame = new DataFrame()
+  columns: string[] = []
   primaryIdColumns: string[] = []
   sampleColumns: string[] = []
   sampleData: Experiment[] = []
   conditionList: string[] = [];
   getID: Subscription | undefined;
-  rawData: string = ""
   submittedQuery: boolean = false
   tempSampleData: Experiment[] = []
-  constructor(public settings: SettingsService, private ws: WebsocketService, private data: DataService) {
+  loadedFile: boolean = false
+  constructor(public settings: SettingsService, private ws: WebsocketService, private data: DataService, private cd: ChangeDetectorRef) {
     this.fileInput = new FormControl(Validators.required);
 
   }
@@ -56,12 +71,15 @@ export class StarterComponent implements OnInit {
   }
 
   onFileSelected() {
+    this.loadedFile = false
     if (typeof (FileReader) !== 'undefined') {
       const reader = new FileReader();
 
       reader.onload = (e: any) => {
-        this.df = fromCSV(<string>e.target.result)
-        this.rawData = <string>e.target.result
+        this._df = fromCSV(<string>e.target.result)
+        this.loadedFile = true
+        this.columns = this._df.getColumnNames()
+        this.columns = [...this.columns]
       };
       reader.readAsText(this.fileInput.value);
     }
@@ -82,11 +100,11 @@ export class StarterComponent implements OnInit {
     this.submittedQuery = true
     this.settings.settings.primaryIDColumns = this.primaryIdColumns
     this.settings.settings.experiments = this.sampleData
-    this.settings.settings.starterFileColumns = this.df.getColumnNames()
+    this.settings.settings.starterFileColumns = this._df.getColumnNames()
     this.getID = this.ws.ws.subscribe(data => {
       if (data["origin"] == "request-id") {
         this.settings.settings.uniqueID = data["id"]
-        this.ws.sendStarter(this.rawData)
+        this.ws.sendStarter(this._df.toJSON())
       } else if (data["origin"] == "upload-starter") {
         this.submittedQuery = false
         this.data.updateDataState(this.blockID, data["data"])
@@ -106,5 +124,15 @@ export class StarterComponent implements OnInit {
 
   ViewInputData() {
     this.data.viewData(this.data.dfMap[1].head(10).bake())
+  }
+
+  parseConditions() {
+    const pattern = new RegExp(/(\w+)\.(\d+)$/)
+    for (const e of this.sampleData) {
+      const match = e.name.match(pattern)
+      if (match) {
+        e.condition = match[1]
+      }
+    }
   }
 }

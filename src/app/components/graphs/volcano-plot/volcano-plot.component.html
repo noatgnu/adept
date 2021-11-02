@@ -7,11 +7,15 @@
     <button mat-button (click)="download()" >Download</button>
     <mat-form-field>
       <mat-label>Comparisons</mat-label>
-      <mat-select [(ngModel)]="chosenComparison" (change)="drawData()">
+      <mat-select [(ngModel)]="chosenComparison" (closed)="drawData()">
         <mat-option *ngFor="let c of comparisons" [value]="c">
           {{c}}
         </mat-option>
       </mat-select>
+    </mat-form-field>
+    <mat-form-field style="margin-left: 10px">
+      <mat-label>P-value threshold</mat-label>
+      <input [(ngModel)]="pCutOff" (focusout)="drawData()" matInput>
     </mat-form-field>
   </mat-card-actions>
 </mat-card>

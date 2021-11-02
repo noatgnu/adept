@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Experiment} from "../../../classes/settings";
 import {DataFrame, fromCSV, IDataFrame} from "data-forge";
 import {SettingsService} from "../../../services/settings.service";
@@ -11,9 +11,15 @@ import {DataService} from "../../../services/data.service";
   styleUrls: ['./p-correction.component.css']
 })
 export class PCorrectionComponent implements OnInit {
+  @Output() parameters: EventEmitter<any> = new EventEmitter<any>()
   _blockID: number = 0
   @Input() set blockID(value: number) {
     this._blockID = value
+    if (Object.keys(this.settings.settings.blocks[this._blockID-1].parameters).length > 0) {
+      this.chosenMethod = this.settings.settings.blocks[this._blockID-1].parameters.chosenMethod
+      this.pCutOff = this.settings.settings.blocks[this._blockID-1].parameters.pCutOff
+    }
+
   }
   get blockID(): number {
     return this._blockID
@@ -54,13 +60,21 @@ export class PCorrectionComponent implements OnInit {
       this.result = this.data.dfMap[this.blockID]
       ws.unsubscribe()
     })
+
+    this.parameters.emit({chosenMethod: this.chosenMethod, pCutOff: this.pCutOff})
     this.ws.correctData(this.chosenMethod, this.pCutOff)
     this.submittedQuery = true
   }
 
-  download = this.data.downloadData
+  download() {
+    this.data.downloadData(this.blockID)
+  }
 
   updateParameters() {
     this.data.updateParametersSubject.next({id: this.blockID, data: {pCutOff: this.pCutOff}, origin: this.blockID})
+  }
+
+  ViewInputData() {
+    this.data.viewData(this.data.dfMap[this._blockID - 1].head(10).bake())
   }
 }

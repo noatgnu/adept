@@ -1,0 +1,9 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>PCA Plot</mat-card-title>
+  </mat-card-header>
+  <plotly-plot [data]="result" [layout]="layout" [updateOnDataChange]="true" [divId]="_blockID+'profile_plot'"></plotly-plot>
+  <mat-card-actions>
+    <button mat-button (click)="download()" >Download</button>
+  </mat-card-actions>
+</mat-card>

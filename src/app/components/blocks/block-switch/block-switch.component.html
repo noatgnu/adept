@@ -1,19 +1,23 @@
-<div [ngSwitch]="block.title">
-  <app-starter [blockID]="block.id" *ngSwitchCase="'Starting Data'"></app-starter>
-  <app-imputation [blockID]="block.id" *ngSwitchCase="'Imputation'"></app-imputation>
-  <app-normalize [blockID]="block.id" *ngSwitchCase="'Normalization'"></app-normalize>
-  <app-ttest [blockID]="block.id" *ngSwitchCase="'TTest'"></app-ttest>
-  <app-p-correction [blockID]="block.id" *ngSwitchCase="'P-Correction'"></app-p-correction>
-  <app-anova [blockID]="block.id" *ngSwitchCase="'ANOVA'"></app-anova>
-  <app-filter-column [blockID]="block.id" *ngSwitchCase="'Filter'"></app-filter-column>
-  <app-fuzzy [blockID]="block.id" *ngSwitchCase="'Fuzzy'"></app-fuzzy>
+<div *ngIf="blockID !== 0">
+  <div [ngSwitch]="settings.settings.blocks[blockID-1].title">
+    <app-starter [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Starting Data'" [df]="df"></app-starter>
+    <app-imputation [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Imputation'" (parameters)="updateParams($event)"></app-imputation>
+    <app-normalize [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Normalization'" (parameters)="updateParams($event)"></app-normalize>
+    <app-ttest [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'TTest'" (parameters)="updateParams($event)"></app-ttest>
+    <app-p-correction [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'P-Correction'" (parameters)="updateParams($event)"></app-p-correction>
+    <app-anova [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'ANOVA'" (parameters)="updateParams($event)"></app-anova>
+    <app-filter-column [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Filter'" (parameters)="updateParams($event)"></app-filter-column>
+    <app-fuzzy [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Fuzzy'" (parameters)="updateParams($event)"></app-fuzzy>
+  </div>
+
+  <mat-grid-list cols="2" *ngIf="settings.settings.blocks[blockID-1].graphs.length > 0" rowHeight="700">
+    <mat-grid-tile [ngSwitch]="g.name" *ngFor="let g of settings.settings.blocks[blockID-1].graphs">
+      <app-profile-plot *ngSwitchCase="'Profile Plot'" [graph]="g"></app-profile-plot>
+      <app-volcano-plot *ngSwitchCase="'Volcano Plot'" [graph]="g"></app-volcano-plot>
+      <app-pca-plot *ngSwitchCase="'PCA'" [graph]="g"></app-pca-plot>
+      <app-fuzzy-plot *ngSwitchCase="'Fuzzy'" [graph]="g"></app-fuzzy-plot>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <mat-divider></mat-divider>
 </div>
 
-<mat-grid-list cols="2" *ngIf="graphs.length > 0" rowHeight="700">
-  <mat-grid-tile [ngSwitch]="g" *ngFor="let g of graphs">
-    <app-profile-plot *ngSwitchCase="'Profile Plot'" [blockID]="block.id"></app-profile-plot>
-    <app-box-plot *ngSwitchCase="'Box Plot'" [blockID]="block.id"></app-box-plot>
-    <app-volcano-plot *ngSwitchCase="'Volcano Plot'" [blockID]="block.id"></app-volcano-plot>
-  </mat-grid-tile>
-</mat-grid-list>
-<mat-divider></mat-divider>

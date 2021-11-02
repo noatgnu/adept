@@ -15,6 +15,7 @@ export class BoxPlotComponent implements OnInit {
   _blockID: number = 0;
   @Input() set blockID (value:number) {
     this._blockID = value
+
     if (this._blockID !== 0) {
       this.df = this.data.dfMap[this._blockID]
       this.drawData()

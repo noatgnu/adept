@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SettingsService} from "../../../services/settings.service";
 import {WebsocketService} from "../../../services/websocket.service";
 import {DataService} from "../../../services/data.service";
@@ -11,9 +11,14 @@ import {Experiment} from "../../../classes/settings";
   styleUrls: ['./normalize.component.css']
 })
 export class NormalizeComponent implements OnInit {
+  @Output() parameters: EventEmitter<any> = new EventEmitter<any>()
   _blockID: number = 0
   @Input() set blockID(value: number) {
     this._blockID = value
+    if (Object.keys(this.settings.settings.blocks[this._blockID-1].parameters).length > 0) {
+      this.chosenMethod = this.settings.settings.blocks[this._blockID-1].parameters.chosenMethod
+    }
+
   }
   get blockID(): number {
     return this._blockID
@@ -25,7 +30,7 @@ export class NormalizeComponent implements OnInit {
     "Z-Score Row": "Perform normalization row-wise. Firstly, rows are normalized by their mean then divided by their standard deviation",
     "Z-Score Column": "Perform normalization column-wise. Firstly, columns are normalized by their mean then divided by their standard deviation",
   }
-  choosenMethod = "Median"
+  chosenMethod = "Median"
   submittedQuery = false
   result: IDataFrame = new DataFrame()
   before: any = {}
@@ -62,8 +67,15 @@ export class NormalizeComponent implements OnInit {
       ws.unsubscribe()
     })
     this.submittedQuery = true
-    this.ws.normalizeData(this.choosenMethod)
+    this.parameters.emit({chosenMethod: this.chosenMethod})
+    this.ws.normalizeData(this.chosenMethod)
   }
 
-  download = this.data.downloadData
+  download() {
+    this.data.downloadData(this.blockID)
+  }
+
+  ViewInputData() {
+    this.data.viewData(this.data.dfMap[this._blockID - 1].head(10).bake())
+  }
 }

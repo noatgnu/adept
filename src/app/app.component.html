@@ -1,10 +1,21 @@
+<input hidden type="file" accept=".json" #uploadSettings id="jsonUploadHidden" (change)="_uploadSettings($event)">
 <mat-toolbar color="primary">
   <button mat-icon-button (click)="toggleSideNav()">
     <mat-icon>menu</mat-icon>
   </button>
   <span>ADEPT</span>
   <span class="spacer"></span>
+  <mat-form-field>
+    <mat-label>Server URL</mat-label>
+    <input matInput value="localhost:8000" #serverURL (keypress)="updateServerURL($event, serverURL.value)" type="text">
+  </mat-form-field>
   <button mat-button *ngIf="settings.settings.uniqueID !== ''">{{settings.settings.uniqueID}}</button>
+  <button mat-icon-button aria-label="Load Data" (click)="uploadSettingsData(uploadSettings)">
+    <mat-icon>open_in_new</mat-icon>
+  </button>
+  <button mat-icon-button aria-label="Save Data" (click)="saveMenu()">
+    <mat-icon>save</mat-icon>
+  </button>
   <button mat-icon-button aria-label="Adding block" [matMenuTriggerFor]="menu">
     <mat-icon>add</mat-icon>
   </button>
@@ -18,7 +29,7 @@
     </mat-selection-list>
   </mat-drawer>
   <mat-drawer-content>
-    <app-block-switch id="{{b.id}}-block-switch" *ngFor="let b of settings.settings.blocks" [block]="b"></app-block-switch>
+    <app-block-switch id="{{b.id}}-block-switch" *ngFor="let b of settings.settings.blocks" [blockID]="b.id"></app-block-switch>
     <button mat-raised-button color="accent" [matMenuTriggerFor]="menu" style="margin-left: 10px; margin-top: 10px"><mat-icon>add</mat-icon></button>
 
   </mat-drawer-content>

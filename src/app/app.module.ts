@@ -41,6 +41,9 @@ import { FuzzyComponent } from './components/blocks/fuzzy/fuzzy.component';
 import { SetDfAsCurrentComponent } from './components/blocks/set-df-as-current/set-df-as-current.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { ViewDatatableComponent } from './components/view-datatable/view-datatable.component';
+import { SavingDataComponent } from './components/saving-data/saving-data.component';
+import { FuzzyPlotComponent } from './components/graphs/fuzzy-plot/fuzzy-plot.component';
+import { PCAPlotComponent } from './components/graphs/pca-plot/pca-plot.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
@@ -59,7 +62,10 @@ PlotlyModule.plotlyjs = PlotlyJS;
     AnovaComponent,
     FuzzyComponent,
     SetDfAsCurrentComponent,
-    ViewDatatableComponent
+    ViewDatatableComponent,
+    SavingDataComponent,
+    FuzzyPlotComponent,
+    PCAPlotComponent
   ],
     imports: [
         BrowserModule,

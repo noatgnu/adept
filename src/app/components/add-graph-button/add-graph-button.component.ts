@@ -15,6 +15,6 @@ export class AddGraphButtonComponent implements OnInit {
   }
 
   addPlot(plotName: string) {
-    this.data.addPlotBehaviorSubject.next({id: this.id, plotType: plotName})
+    this.data.addGraph(this.id, plotName)
   }
 }

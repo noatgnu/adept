@@ -4,6 +4,7 @@ import {SettingsService} from "../../../services/settings.service";
 import {WebsocketService} from "../../../services/websocket.service";
 import {DataFrame, IDataFrame} from "data-forge";
 import {PlotlyService} from "angular-plotly.js";
+import {Graph} from "../../../classes/settings";
 
 @Component({
   selector: 'app-profile-plot',
@@ -13,12 +14,15 @@ import {PlotlyService} from "angular-plotly.js";
 export class ProfilePlotComponent implements OnInit {
 
   _blockID: number = 0;
-  @Input() set blockID (value:number) {
-    this._blockID = value
-    if (this._blockID !== 0) {
-      this.df = this.data.dfMap[this._blockID]
-      this.drawData()
+  set blockID (value:number) {
+    if(value) {
+      this._blockID = value
+      if (this._blockID !== 0) {
+        this.df = this.data.dfMap[this._blockID]
+        this.drawData()
+      }
     }
+
   }
 
   log10Transform: boolean = false;
@@ -26,6 +30,14 @@ export class ProfilePlotComponent implements OnInit {
   result: any[] = []
   layout: any = {height: 450, width:450}
   df: IDataFrame = new DataFrame()
+
+  _graph: Graph = {id: 0, name: "", parameters: undefined, parentBlockID: 0}
+
+  @Input() set graph(value: Graph) {
+    this._graph = value
+    this.blockID = this._graph.parentBlockID
+  }
+
   constructor(private data: DataService, private settings: SettingsService, private ws: WebsocketService, private plotly: PlotlyService) {
 
   }

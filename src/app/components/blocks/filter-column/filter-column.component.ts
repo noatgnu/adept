@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Experiment} from "../../../classes/settings";
 import {DataFrame, fromCSV, IDataFrame} from "data-forge";
 import {SettingsService} from "../../../services/settings.service";
@@ -13,12 +13,17 @@ import {MatTable} from "@angular/material/table";
   styleUrls: ['./filter-column.component.css']
 })
 export class FilterColumnComponent implements OnInit {
+  @Output() parameters: EventEmitter<any> = new EventEmitter<any>()
   @ViewChild(MatTable) table: MatTable<any>|undefined;
   _blockID: number = 0
   @Input() set blockID(value: number) {
     this._blockID = value
     this.filterSteps = []
     this.columns = this.data.dfMap[value-1].getColumnNames()
+    if (Object.keys(this.settings.settings.blocks[this._blockID-1].parameters).length > 0) {
+      this.filterSteps = this.settings.settings.blocks[this._blockID-1].parameters.filterSteps
+    }
+
   }
   get blockID(): number {
     return this._blockID
@@ -62,10 +67,17 @@ export class FilterColumnComponent implements OnInit {
       this.result = this.data.dfMap[this.blockID]
       ws.unsubscribe()
     })
+    this.parameters.emit({filterSteps: this.filterSteps})
     this.ws.filterData(this.filterSteps)
     this.submittedQuery = true
 
   }
 
-  download = this.data.downloadData
+  download() {
+    this.data.downloadData(this.blockID)
+  }
+
+  ViewInputData() {
+    this.data.viewData(this.data.dfMap[this._blockID - 1].head(10).bake())
+  }
 }

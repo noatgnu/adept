@@ -13,20 +13,20 @@
           </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-          <mat-form-field *ngIf="df.count() > 0">
+          <mat-form-field>
               <mat-label>Primary ID</mat-label>
               <mat-select multiple [(ngModel)]="primaryIdColumns">
-                  <mat-option *ngFor="let col of df.getColumnNames()" [value]="col">
+                  <mat-option *ngFor="let col of columns" [value]="col">
                       {{col}}
                   </mat-option>
               </mat-select>
           </mat-form-field>
       </mat-grid-tile>
     <mat-grid-tile>
-      <mat-form-field *ngIf="df.count() > 0">
+      <mat-form-field>
         <mat-label>Sample columns</mat-label>
         <mat-select multiple [(ngModel)]="sampleColumns" (closed)="setSampleData()">
-          <mat-option *ngFor="let col of df.getColumnNames()" [value]="col">
+          <mat-option *ngFor="let col of columns" [value]="col">
             {{col}}
           </mat-option>
         </mat-select>
@@ -48,7 +48,7 @@
       <td mat-cell *matCellDef="let r">{{r.name}}</td>
     </ng-container>
     <ng-container matColumnDef="condition">
-      <th mat-header-cell *matHeaderCellDef>Sample condition</th>
+      <th mat-header-cell *matHeaderCellDef>Sample condition <button mat-flat-button style="margin-left: 50px" (click)="parseConditions()">Parse Condition</button></th>
       <td mat-cell *matCellDef="let r">
         <mat-form-field>
           <input type="text" matInput [(ngModel)]="r.condition" [matAutocomplete]="auto" (focusout)="updateConditionList()">
@@ -74,6 +74,3 @@
     <mat-progress-bar mode="query" *ngIf="submittedQuery"></mat-progress-bar>
   </mat-card-footer>
 </mat-card>
-
-
-

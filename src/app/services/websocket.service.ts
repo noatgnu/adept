@@ -9,6 +9,15 @@ import {SettingsService} from "./settings.service";
   providedIn: 'root'
 })
 export class WebsocketService {
+  get serverURL(): string {
+    return this._serverURL;
+  }
+
+  set serverURL(value: string) {
+    this._serverURL = value;
+    this.baseUrl = "ws://" + this._serverURL + "/rpc"
+  }
+  private _serverURL: string = "localhost:8000"
   baseUrl: string = "ws://localhost:8000/rpc"
   private messsageEvent: Subject<MessageEvent> = new Subject<MessageEvent>();
   ws: WebSocketSubject<WebSocketMessageEvent>;
@@ -52,6 +61,10 @@ export class WebsocketService {
 
   fuzzyClusterData(threshold: number) {
     this.ws.next(new WebSocketMessageEvent("Fuzzy", threshold.toString(), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
+  }
+
+  updateBaseUrl(url: string) {
+    this.serverURL = url
   }
 }
 

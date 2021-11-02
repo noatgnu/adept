@@ -16,8 +16,11 @@ export class DataService {
 
   constructor(private settings: SettingsService, private dialog: MatDialog) { }
 
-  downloadData(data: string) {
-    const blob = new Blob([data], {type: 'text/csv'})
+  downloadData(id: number) {
+    console.log(this.dfMap)
+    console.log(id)
+    console.log(this.dfMap[id])
+    const blob = new Blob([this.dfMap[id].toCSV()], {type: 'text/csv'})
     const url = window.URL.createObjectURL(blob);
 
     if (typeof(navigator.msSaveOrOpenBlob)==="function") {
@@ -52,7 +55,18 @@ export class DataService {
     dialofRef.afterClosed().subscribe(result => {
       console.log("Closed")
     })
+  }
 
+  addGraph(id: number, plotType: string) {
+    const blockID = id - 1
+    let i = this.settings.settings.blocks[blockID].graphs.length
+    this.settings.settings.blocks[blockID].graphs.push({id: i+1, name: plotType, parameters: {}, parentBlockID: id})
 
+    this.addPlotBehaviorSubject.next({id:id, plotType:plotType})
+  }
+
+  updateDFmap(data: any) {
+    this.dfMap = data
+    console.log(this.dfMap)
   }
 }

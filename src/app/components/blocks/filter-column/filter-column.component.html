@@ -99,8 +99,9 @@
   </table>
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="filterData()" style="margin-right: 10px">Submit</button>
+    <button mat-raised-button color="primary" (click)="ViewInputData()" style="margin-right: 10px">View Sample Of Input Data</button>
     <app-add-graph-button [id]="blockID" *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"></app-add-graph-button>
-    <button mat-raised-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" color="accent" (click)="download(result.toCSV())" style="margin-right: 10px">Download CSV</button>
+    <button mat-raised-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" color="accent" (click)="download()" style="margin-right: 10px">Download CSV</button>
     <button mat-icon-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"><mat-icon color="primary">check_circle</mat-icon></button>
   </mat-card-actions>
 </mat-card>
