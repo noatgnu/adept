@@ -8,6 +8,7 @@
     <app-anova [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'ANOVA'" (parameters)="updateParams($event)"></app-anova>
     <app-filter-column [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Filter'" (parameters)="updateParams($event)"></app-filter-column>
     <app-fuzzy [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Fuzzy'" (parameters)="updateParams($event)"></app-fuzzy>
+    <app-set-df-as-current [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Change Current DF'" (parameters)="updateParams($event)"></app-set-df-as-current>
   </div>
 
   <mat-grid-list cols="2" *ngIf="settings.settings.blocks[blockID-1].graphs.length > 0" rowHeight="700">

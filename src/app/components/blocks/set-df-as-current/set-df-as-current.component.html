@@ -1,1 +1,25 @@
-<p>set-df-as-current works!</p>
+<mat-card class="container">
+  <mat-card-title>
+    Set Current DF
+  </mat-card-title>
+  <mat-grid-list cols="2" rowHeight="100">
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-label>Data from previous process</mat-label>
+        <mat-select [(ngModel)]="chosenBlockID">
+          <mat-option *ngFor="let b of dataOptions" [value]="b">
+            {{b.id}}. {{b.title}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="changeCurrentDF()" style="margin-right: 10px">Submit</button>
+    <button mat-raised-button color="primary" (click)="ViewInputData()" style="margin-right: 10px">View Sample Of Input Data</button>
+    <app-add-graph-button [id]="blockID" *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"></app-add-graph-button>
+    <button mat-raised-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" color="accent" (click)="download()" style="margin-right: 10px">Download CSV</button>
+    <button mat-icon-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"><mat-icon color="primary">check_circle</mat-icon></button>
+  </mat-card-actions>
+</mat-card>

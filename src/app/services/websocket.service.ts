@@ -66,6 +66,10 @@ export class WebsocketService {
   updateBaseUrl(url: string) {
     this.serverURL = url
   }
+
+  changeCurrentDF(currentBlockID: number) {
+    this.ws.next(new WebSocketMessageEvent("ChangeCurrentDF", currentBlockID.toString(), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
+  }
 }
 
 export class WebSocketMessageEvent {

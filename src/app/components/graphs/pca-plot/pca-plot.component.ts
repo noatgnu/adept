@@ -60,7 +60,7 @@ export class PCAPlotComponent implements OnInit {
           type: "scatter",
           mode: "markers",
           name: r.Cluster,
-          showlegend: false,
+          showlegend: true,
         }
       }
       dataPCA[r.Cluster].x.push(r.PC1)
