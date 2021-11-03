@@ -1,6 +1,8 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>Profile Plot</mat-card-title>
+    <span class="spacer"></span>
+    <button mat-icon-button color="warn" (click)="delete()"><mat-icon>delete</mat-icon></button>
   </mat-card-header>
   <plotly-plot [data]="result" [layout]="layout" [updateOnDataChange]="true" [divId]="_blockID+'profile_plot'"></plotly-plot>
   <mat-card-actions>

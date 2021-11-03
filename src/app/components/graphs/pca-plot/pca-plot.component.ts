@@ -125,9 +125,11 @@ export class PCAPlotComponent implements OnInit {
   }
 
   async download(format: string = "svg") {
-    const graph = this.plotly.getInstanceByDivId(this._blockID + "profile_plot");
+    const graph = this.plotly.getInstanceByDivId(this._blockID + "pca_plot");
     const p = await this.plotly.getPlotly();
     await p.downloadImage(graph, {format: format, filename: "image"})
   }
-
+  delete() {
+    this.data.deleteGraph(this._graph)
+  }
 }

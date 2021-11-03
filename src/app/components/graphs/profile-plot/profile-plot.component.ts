@@ -113,4 +113,7 @@ export class ProfilePlotComponent implements OnInit {
     const p = await this.plotly.getPlotly();
     await p.downloadImage(graph, {format: format, filename: "image"})
   }
+  delete() {
+    this.data.deleteGraph(this._graph)
+  }
 }

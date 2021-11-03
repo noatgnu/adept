@@ -6,7 +6,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {ViewDatatableComponent} from "../components/view-datatable/view-datatable.component";
 import {BlockDeletePromptComponent} from "../components/block-delete-prompt/block-delete-prompt.component";
 import {WebsocketService} from "./websocket.service";
-import {Block} from "../classes/settings";
+import {Block, Graph} from "../classes/settings";
+import {GraphDeletePromptComponent} from "../components/graph-delete-prompt/graph-delete-prompt.component";
 
 @Injectable({
   providedIn: 'root'
@@ -91,6 +92,28 @@ export class DataService {
         this.dfMap[lastID] = null
         this.settings.settings.blocks = blocks
         console.log("Deleting block " + id)
+      }
+
+    })
+  }
+
+  deleteGraph(graph: Graph) {
+    const dialogRef = this.dialog.open(GraphDeletePromptComponent)
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const b = this.settings.settings.blocks[graph.parentBlockID-1]
+        const graphs: Graph[] = []
+        let lastID: number = 0
+        for (const g of b.graphs) {
+          lastID = g.id
+          if (graph.id > g.id) {
+            graphs.push(g)
+          } else if (graph.id < g.id) {
+            g.id = g.id - 1
+            graphs.push(g)
+          }
+        }
+        this.settings.settings.blocks[graph.parentBlockID-1].graphs = graphs
       }
 
     })

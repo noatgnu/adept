@@ -161,8 +161,12 @@ export class HeatmapComponent implements OnInit {
   }
 
   async download(format: string = "svg") {
-    const graph = this.plotly.getInstanceByDivId(this._blockID + "profile_plot");
+    const graph = this.plotly.getInstanceByDivId(this._blockID + "heatmap");
     const p = await this.plotly.getPlotly();
     await p.downloadImage(graph, {format: format, filename: "image"})
+  }
+
+  delete() {
+    this.data.deleteGraph(this._graph)
   }
 }

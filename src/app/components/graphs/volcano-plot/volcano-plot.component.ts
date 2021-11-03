@@ -64,11 +64,14 @@ export class VolcanoPlotComponent implements OnInit {
   constructor(private data: DataService, private settings: SettingsService, private ws: WebsocketService, private plotly: PlotlyService) {
     this.data.updateParametersSubject.asObservable().subscribe(data => {
       if (data["id"] === this.blockID && data["id"] === data["origin"]) {
-        if ("pCutoff" in data["data"]) {
-          this.pCutOff = data["pCutoff"]
-          this.settings.settings.blocks[this._graph.parentBlockID-1].graphs[this._graph.id-1].parameters.pCutOff = this.pCutOff
-          this.drawData()
+        if (data["data"]) {
+          if ("pCutoff" in data["data"]) {
+            this.pCutOff = data["pCutoff"]
+            this.settings.settings.blocks[this._graph.parentBlockID-1].graphs[this._graph.id-1].parameters.pCutOff = this.pCutOff
+            this.drawData()
+          }
         }
+
       }
     })
   }
@@ -140,9 +143,11 @@ export class VolcanoPlotComponent implements OnInit {
   }
 
   async download(format: string = "svg") {
-    const graph = this.plotly.getInstanceByDivId(this._blockID + "profile_plot");
+    const graph = this.plotly.getInstanceByDivId(this._blockID + "volcano_plot");
     const p = await this.plotly.getPlotly();
     await p.downloadImage(graph, {format: format, filename: "image"})
   }
-
+  delete() {
+    this.data.deleteGraph(this._graph)
+  }
 }

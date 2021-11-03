@@ -113,7 +113,7 @@ export class FuzzyPlotComponent implements OnInit {
   }
 
   async download(format: string = "svg") {
-    const graph = this.plotly.getInstanceByDivId(this._blockID + "profile_plot");
+    const graph = this.plotly.getInstanceByDivId(this._blockID + "fuzzy_plot");
     const p = await this.plotly.getPlotly();
     await p.downloadImage(graph, {format: format, filename: "image"})
   }
@@ -121,5 +121,9 @@ export class FuzzyPlotComponent implements OnInit {
   selectCluster() {
     this.result = [...this.dataFuzzy[this.selectedCluster]]
     console.log(this.result)
+  }
+
+  delete() {
+    this.data.deleteGraph(this._graph)
   }
 }

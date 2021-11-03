@@ -46,6 +46,7 @@ import { FuzzyPlotComponent } from './components/graphs/fuzzy-plot/fuzzy-plot.co
 import { PCAPlotComponent } from './components/graphs/pca-plot/pca-plot.component';
 import { HeatmapComponent } from './components/graphs/heatmap/heatmap.component';
 import { BlockDeletePromptComponent } from './components/block-delete-prompt/block-delete-prompt.component';
+import { GraphDeletePromptComponent } from './components/graph-delete-prompt/graph-delete-prompt.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     FuzzyPlotComponent,
     PCAPlotComponent,
     HeatmapComponent,
-    BlockDeletePromptComponent
+    BlockDeletePromptComponent,
+    GraphDeletePromptComponent
   ],
     imports: [
         BrowserModule,

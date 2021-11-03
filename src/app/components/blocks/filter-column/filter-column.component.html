@@ -106,4 +106,7 @@
     <button mat-raised-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" color="accent" (click)="download()" style="margin-right: 10px">Download CSV</button>
     <button mat-icon-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"><mat-icon color="primary">check_circle</mat-icon></button>
   </mat-card-actions>
+  <mat-card-footer>
+    <mat-progress-bar mode="query" *ngIf="submittedQuery"></mat-progress-bar>
+  </mat-card-footer>
 </mat-card>

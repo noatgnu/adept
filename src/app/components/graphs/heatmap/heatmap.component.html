@@ -1,8 +1,10 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>Heat Map</mat-card-title>
+    <button mat-icon-button color="warn" (click)="delete()"><mat-icon>delete</mat-icon></button>
   </mat-card-header>
-  <plotly-plot [data]="result" [layout]="layout" [updateOnDataChange]="true" [divId]="_blockID+'profile_plot'"></plotly-plot>
+
+  <plotly-plot [data]="result" [layout]="layout" [updateOnDataChange]="true" [divId]="_blockID+'heatmap'"></plotly-plot>
   <mat-card-actions>
     <button mat-button (click)="download()">Download</button>
     <mat-slide-toggle color="primary" [(ngModel)]="log10Transform" (change)="drawData()">
