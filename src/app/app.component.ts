@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, HostListener, OnDestroy} from '@angular/core';
 import {FormControl, Validators} from "@angular/forms";
 import {DataFrame, fromCSV, fromJSON, IDataFrame} from "data-forge";
 import {WebsocketService} from "./services/websocket.service";
@@ -12,7 +12,7 @@ import {DataService} from "./services/data.service";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy{
   title = 'adept';
 
   opened: boolean = true
@@ -80,5 +80,9 @@ export class AppComponent {
     if (e.key === "Enter") {
       this.ws.updateBaseUrl(url)
     }
+  }
+  @HostListener('window:beforeunload')
+  async ngOnDestroy() {
+
   }
 }

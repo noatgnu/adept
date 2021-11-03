@@ -1,7 +1,9 @@
 <mat-card class="container">
-  <mat-card-title>
-    Filter Data
-  </mat-card-title>
+  <mat-card-header>
+    <mat-card-title>Filter Data</mat-card-title>
+    <span class="spacer"></span>
+    <button mat-icon-button color="warn" (click)="delete()"><mat-icon>delete</mat-icon></button>
+  </mat-card-header>
   <mat-grid-list cols="5" rowHeight="100">
     <mat-grid-tile *ngIf="columns.length > 0">
       <mat-form-field>

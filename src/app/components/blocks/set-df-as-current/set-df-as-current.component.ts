@@ -62,6 +62,10 @@ export class SetDfAsCurrentComponent implements OnInit {
     this.data.downloadData(this.blockID)
   }
 
+  delete() {
+    this.data.deleteBlock(this._blockID)
+  }
+
   ViewInputData() {
     this.data.viewData(this.data.dfMap[this._blockID - 1].head(10).bake())
   }

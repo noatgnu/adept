@@ -1,4 +1,4 @@
-<div *ngIf="blockID !== 0">
+<div *ngIf="blockID !== 0" style="margin-top: 10px">
   <div [ngSwitch]="settings.settings.blocks[blockID-1].title">
     <app-starter [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Starting Data'" [df]="df"></app-starter>
     <app-imputation [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Imputation'" (parameters)="updateParams($event)"></app-imputation>

@@ -75,6 +75,11 @@ export class FilterColumnComponent implements OnInit {
 
   download() {
     this.data.downloadData(this.blockID)
+
+  }
+
+  delete() {
+    this.data.deleteBlock(this._blockID)
   }
 
   ViewInputData() {

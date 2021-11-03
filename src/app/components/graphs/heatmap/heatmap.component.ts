@@ -41,8 +41,21 @@ export class HeatmapComponent implements OnInit {
   log10Transform: boolean = false;
 
   result: any[] = []
-  layout: any = {height: 450, width:450}
+  layout: any = {height: 450, width:450,
+    xaxis: {
+      tickangle: 90,
+      tickmode: "array",
+      tickvals: [],
+      ticktext: [],
+    },
+    yaxis: {
+      tickmode: "array",
+      tickvals: [],
+      ticktext: [],
+    }
+  }
 
+  showAllTicks: boolean = false
   constructor(private data: DataService, private settings: SettingsService, private ws: WebsocketService, private plotly: PlotlyService) { }
 
   ngOnInit(): void {
@@ -52,6 +65,35 @@ export class HeatmapComponent implements OnInit {
 
   dataFuzzy: any = {}
   drawData() {
+    let layout: any
+    if (this.showAllTicks) {
+      layout = {height: 450, width:450,
+        xaxis: {
+          tickangle: 90,
+          tickmode: "array",
+          tickvals: [],
+          ticktext: [],
+        },
+        yaxis: {
+          tickmode: "array",
+          tickvals: [],
+          ticktext: [],
+        }
+      }
+    } else {
+      layout = {height: 450, width:450,
+        xaxis: {
+          tickangle: 90,
+          tickmode: "category",
+          showticklabels: true
+        },
+        yaxis: {
+          tickmode: "category",
+          showticklabels: true
+        }
+      }
+    }
+
     this.result = []
     this.dataFuzzy = {}
     const experiments: string[] = []
@@ -71,6 +113,11 @@ export class HeatmapComponent implements OnInit {
       console.log(c)
       if (experiments.includes(c)) {
         temp.x.push(c)
+        if (this.showAllTicks) {
+          layout.xaxis.tickvals.push(c)
+          layout.xaxis.ticktext.push(c)
+        }
+
       }
     }
 
@@ -81,6 +128,10 @@ export class HeatmapComponent implements OnInit {
       }
       const primaryID = primaryIDList.join(";")
       temp.y.push(primaryID)
+      if (this.showAllTicks) {
+        layout.yaxis.tickvals.push(primaryID)
+        layout.yaxis.ticktext.push(primaryID)
+      }
       const arr: any[] = []
       for (const c of temp.x) {
         if (r[c] !== "") {
@@ -105,6 +156,7 @@ export class HeatmapComponent implements OnInit {
       temp.z.push(arr)
     }
     console.log(temp)
+    this.layout = layout
     this.result = [temp]
   }
 

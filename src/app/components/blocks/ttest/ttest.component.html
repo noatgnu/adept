@@ -1,9 +1,13 @@
 <mat-card class="container">
-  <mat-card-title>Two Samples T-Test</mat-card-title>
+  <mat-card-header>
+    <mat-card-title>Two Sample T-Test</mat-card-title>
+    <span class="spacer"></span>
+    <button mat-icon-button color="warn" (click)="delete()"><mat-icon>delete</mat-icon></button>
+  </mat-card-header>
   <mat-grid-list cols="4" rowHeight="100" *ngIf="conditions.length > 0">
     <mat-grid-tile>
       <mat-form-field>
-        <mat-label>Condition-A</mat-label>
+        <mat-label>Condition A</mat-label>
         <mat-select [(ngModel)]="selectedA" >
           <mat-option *ngFor="let col of conditions" [value]="col">
             {{col}}

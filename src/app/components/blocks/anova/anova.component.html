@@ -1,5 +1,9 @@
 <mat-card class="container">
-  <mat-card-title>ANOVA</mat-card-title>
+  <mat-card-header>
+    <mat-card-title>ANOVA</mat-card-title>
+    <span class="spacer"></span>
+    <button mat-icon-button color="warn" (click)="delete()"><mat-icon>delete</mat-icon></button>
+  </mat-card-header>
   <mat-grid-list cols="4" rowHeight="100" *ngIf="conditions.length > 0">
     <mat-grid-tile>
       <mat-form-field>

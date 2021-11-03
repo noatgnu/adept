@@ -4,6 +4,9 @@ import {BehaviorSubject, Subject} from "rxjs";
 import {SettingsService} from "./settings.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ViewDatatableComponent} from "../components/view-datatable/view-datatable.component";
+import {BlockDeletePromptComponent} from "../components/block-delete-prompt/block-delete-prompt.component";
+import {WebsocketService} from "./websocket.service";
+import {Block} from "../classes/settings";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +17,7 @@ export class DataService {
   viewDataTableSubject: Subject<IDataFrame> = new Subject<IDataFrame>()
   dfMap: any = {}
 
-  constructor(private settings: SettingsService, private dialog: MatDialog) { }
+  constructor(private settings: SettingsService, private dialog: MatDialog, private ws: WebsocketService) { }
 
   downloadData(id: number) {
     console.log(this.dfMap)
@@ -57,11 +60,46 @@ export class DataService {
     })
   }
 
+  deleteBlock(id: number) {
+    const dialogRef = this.dialog.open(BlockDeletePromptComponent)
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (this.settings.settings.blocks[id-1].completed) {
+          this.ws.DeleteNode(id)
+        }
+
+        const blocks: Block[] = []
+        let lastID: number = 0
+        for (const b of this.settings.settings.blocks) {
+          lastID = b.id
+          if (b.id < id) {
+            blocks.push(b)
+          } else if (b.id > id) {
+            b.id = b.id - 1
+            if (this.dfMap[b.id+1]) {
+              this.dfMap[b.id] = this.dfMap[b.id+1]
+            }
+            for (const g of b.graphs) {
+              g.parentBlockID = b.id
+            }
+            b.completed = false
+            blocks.push(b)
+          } else {
+
+          }
+        }
+        this.dfMap[lastID] = null
+        this.settings.settings.blocks = blocks
+        console.log("Deleting block " + id)
+      }
+
+    })
+  }
+
   addGraph(id: number, plotType: string) {
     const blockID = id - 1
     let i = this.settings.settings.blocks[blockID].graphs.length
     this.settings.settings.blocks[blockID].graphs.push({id: i+1, name: plotType, parameters: {}, parentBlockID: id})
-
     this.addPlotBehaviorSubject.next({id:id, plotType:plotType})
   }
 

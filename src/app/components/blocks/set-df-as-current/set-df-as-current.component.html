@@ -1,7 +1,9 @@
 <mat-card class="container">
-  <mat-card-title>
-    Set Current DF
-  </mat-card-title>
+  <mat-card-header>
+    <mat-card-title>Set Current Data From Previous Block</mat-card-title>
+    <span class="spacer"></span>
+    <button mat-icon-button color="warn" (click)="delete()"><mat-icon>delete</mat-icon></button>
+  </mat-card-header>
   <mat-grid-list cols="2" rowHeight="100">
     <mat-grid-tile>
       <mat-form-field>

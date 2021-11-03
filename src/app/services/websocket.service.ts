@@ -70,6 +70,14 @@ export class WebsocketService {
   changeCurrentDF(currentBlockID: number) {
     this.ws.next(new WebSocketMessageEvent("ChangeCurrentDF", currentBlockID.toString(), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
   }
+
+  EndSession() {
+    this.ws.next(new WebSocketMessageEvent("EndSession", "", "",  "", this.settings.settings.uniqueID))
+  }
+
+  DeleteNode(id: number) {
+    this.ws.next(new WebSocketMessageEvent("DeleteNode", id.toString(), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID))
+  }
 }
 
 export class WebSocketMessageEvent {

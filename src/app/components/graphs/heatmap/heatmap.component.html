@@ -8,6 +8,9 @@
     <mat-slide-toggle color="primary" [(ngModel)]="log10Transform" (change)="drawData()">
       Log10 transform data
     </mat-slide-toggle>
+    <mat-slide-toggle color="primary" [(ngModel)]="showAllTicks" (change)="drawData()">
+      Show all axis ticks
+    </mat-slide-toggle>
   </mat-card-actions>
 </mat-card>
 
