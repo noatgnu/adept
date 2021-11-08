@@ -16,6 +16,7 @@ export class SettingsService {
 
   saveSettings(dfMap: any) {
     const settings: ExportData = {settings: this.settings, data: dfMap}
+
     const blob = new Blob([JSON.stringify(settings)], {type: 'text/csv'})
     const url = window.URL.createObjectURL(blob);
 

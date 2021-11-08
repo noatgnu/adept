@@ -3,6 +3,11 @@
     <mat-label>Analysis Description</mat-label>
     <textarea matInput></textarea>
   </mat-form-field>
+  <div>
+    <mat-slide-toggle color="primary" [(ngModel)]="saveServer">
+      Save Analysis on Server
+    </mat-slide-toggle>
+  </div>
 
 </mat-dialog-content>
 <mat-dialog-actions>

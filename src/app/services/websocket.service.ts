@@ -96,6 +96,14 @@ export class WebsocketService {
   CorrelationMatrix(method: string) {
     this.ws.next(new WebSocketMessageEvent("CorrelationMatrix", method, "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID, this.activeBlock))
   }
+
+  SaveAnalysis(jsonData: string) {
+    this.ws.next(new WebSocketMessageEvent("SaveAnalysis", jsonData, "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID, this.activeBlock))
+  }
+
+  LoadSaved(id: string) {
+    this.ws.next(new WebSocketMessageEvent("LoadSaved", id, "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID, this.activeBlock))
+  }
 }
 
 export class WebSocketMessageEvent {

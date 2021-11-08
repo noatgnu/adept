@@ -53,6 +53,8 @@ import {HttpClientModule} from "@angular/common/http";
 import { CurtainUploaderComponent } from './components/curtain-uploader/curtain-uploader.component';
 import {MatStepperModule} from "@angular/material/stepper";
 import { CorrelationMatrixComponent } from './components/blocks/correlation-matrix/correlation-matrix.component';
+import {AppRoutingModule} from "./app-routing.module";
+import { HomeComponent } from './components/home/home.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
@@ -80,9 +82,11 @@ PlotlyModule.plotlyjs = PlotlyJS;
     GraphDeletePromptComponent,
     BarChartComponent,
     CurtainUploaderComponent,
-    CorrelationMatrixComponent
+    CorrelationMatrixComponent,
+    HomeComponent
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
