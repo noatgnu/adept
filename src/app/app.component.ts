@@ -6,6 +6,7 @@ import {SettingsService} from "./services/settings.service";
 import {Block, ExportData} from "./classes/settings";
 import {toArray} from "rxjs/operators";
 import {DataService} from "./services/data.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,7 @@ export class AppComponent implements OnDestroy{
   title = 'adept';
 
   opened: boolean = true
-  constructor(private ws: WebsocketService, public settings: SettingsService, private data: DataService) {
+  constructor(private ws: WebsocketService, public settings: SettingsService, private data: DataService, private snack: MatSnackBar) {
     const a = this.ws.ws.subscribe(data => {
       console.log(data)
       a.unsubscribe()
@@ -79,10 +80,15 @@ export class AppComponent implements OnDestroy{
   updateServerURL(e: KeyboardEvent, url: string) {
     if (e.key === "Enter") {
       this.ws.updateBaseUrl(url)
+      this.snack.open("Server backend link has been updated: " + this.ws.baseUrl, "", {duration: 5000})
     }
   }
   @HostListener('window:beforeunload')
   async ngOnDestroy() {
+    this.ws.EndSession()
+  }
 
+  openCurtainUploader() {
+    this.data.viewCurtainUploader()
   }
 }

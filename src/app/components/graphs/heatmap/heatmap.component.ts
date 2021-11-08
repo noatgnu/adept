@@ -66,6 +66,8 @@ export class HeatmapComponent implements OnInit {
   dataFuzzy: any = {}
   drawData() {
     let layout: any
+
+
     if (this.showAllTicks) {
       layout = {height: 450, width:450,
         xaxis: {
@@ -122,16 +124,26 @@ export class HeatmapComponent implements OnInit {
     }
 
     for (const r of this.df) {
-      let primaryIDList = []
-      for (const c of this.settings.settings.primaryIDColumns) {
-        primaryIDList.push(r[c])
+
+      if (this.settings.settings.blocks[this._graph.parentBlockID-1].title === "Correlation Matrix") {
+        temp.y.push(r[""])
+        if (this.showAllTicks) {
+          layout.yaxis.tickvals.push(r[""])
+          layout.yaxis.ticktext.push(r[""])
+        }
+      } else {
+        let primaryIDList = []
+        for (const c of this.settings.settings.primaryIDColumns) {
+          primaryIDList.push(r[c])
+        }
+        const primaryID = primaryIDList.join(";")
+        temp.y.push(primaryID)
+        if (this.showAllTicks) {
+          layout.yaxis.tickvals.push(primaryID)
+          layout.yaxis.ticktext.push(primaryID)
+        }
       }
-      const primaryID = primaryIDList.join(";")
-      temp.y.push(primaryID)
-      if (this.showAllTicks) {
-        layout.yaxis.tickvals.push(primaryID)
-        layout.yaxis.ticktext.push(primaryID)
-      }
+
       const arr: any[] = []
       for (const c of temp.x) {
         if (r[c] !== "") {

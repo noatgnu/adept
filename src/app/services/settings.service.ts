@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {ExportData, Settings} from "../classes/settings";
+import {CurtainSettings, ExportData, Settings} from "../classes/settings";
 import {MatDialog} from "@angular/material/dialog";
 import {SavingDataComponent} from "../components/saving-data/saving-data.component";
 import {BehaviorSubject, Subject} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ import {BehaviorSubject, Subject} from "rxjs";
 export class SettingsService {
   settings: Settings = new Settings()
   newSettingsLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
-  constructor(private dialog: MatDialog) { }
+  curtainSettings: CurtainSettings = new CurtainSettings()
+  constructor(private http: HttpClient, private dialog: MatDialog) { }
 
   saveSettings(dfMap: any) {
     const settings: ExportData = {settings: this.settings, data: dfMap}
@@ -39,5 +41,9 @@ export class SettingsService {
 
   settingsUpdated() {
     this.newSettingsLoaded.next(true)
+  }
+
+  putCurtainSettings(settings: any) {
+    return this.http.put("http://www.conducto.me/file_data", JSON.stringify(settings), {responseType: "text", observe: "response"})
   }
 }

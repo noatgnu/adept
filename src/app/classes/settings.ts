@@ -1,3 +1,5 @@
+import {DataFrame, IDataFrame} from "data-forge";
+
 export class Settings {
   uniqueID: string = ""
   starterFileColumns: string[] = []
@@ -26,6 +28,7 @@ export interface Block {
   originData?: string;
   graphs: Graph[];
   parameters: any;
+  extra?: any;
 }
 
 export interface Graph {
@@ -33,4 +36,31 @@ export interface Graph {
   name: string;
   parameters: any;
   parentBlockID: number;
+}
+
+export class CurtainSettings {
+  rawFile: string = ""
+  processedFile: string = ""
+  selectedIDs: any = {}
+  annotatedIDs: any[] = []
+  uniprot: boolean = false
+  dbString: boolean = false
+  antilogP: boolean = false
+  fileSavedOnSever: boolean = false
+  sampleLables: any = {}
+  fileIsLink: boolean = false
+  description: string = ""
+  dataColumns: GraphData = new GraphData()
+}
+
+export class GraphData {
+  raw: IDataFrame = new DataFrame()
+  processed: IDataFrame = new DataFrame()
+  rawIdentifierCol: string = ""
+  rawSamplesCol: string[] = []
+  processedIdentifierCol: string = ""
+  processedLog2FC: string = ""
+  processedPValue: string = ""
+  processedCompLabel: string = ""
+  uniprotMap: Map<string, any> = new Map<string, any>()
 }

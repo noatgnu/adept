@@ -8,16 +8,18 @@ import {BlockDeletePromptComponent} from "../components/block-delete-prompt/bloc
 import {WebsocketService} from "./websocket.service";
 import {Block, Graph} from "../classes/settings";
 import {GraphDeletePromptComponent} from "../components/graph-delete-prompt/graph-delete-prompt.component";
+import {CurtainUploaderComponent} from "../components/curtain-uploader/curtain-uploader.component";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+
   currentDF: IDataFrame = new DataFrame()
   addPlotBehaviorSubject: BehaviorSubject<any> = new BehaviorSubject<any>({id:0, plotType:""})
   viewDataTableSubject: Subject<IDataFrame> = new Subject<IDataFrame>()
   dfMap: any = {}
-
+  links: any = {}
   constructor(private settings: SettingsService, private dialog: MatDialog, private ws: WebsocketService) { }
 
   downloadData(id: number) {
@@ -129,5 +131,25 @@ export class DataService {
   updateDFmap(data: any) {
     this.dfMap = data
     console.log(this.dfMap)
+  }
+
+  viewCurtainUploader() {
+    const dialogRef = this.dialog.open(CurtainUploaderComponent)
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        result.data.settings = JSON.stringify(this.settings.curtainSettings)
+        this.settings.putCurtainSettings(result.data).subscribe(data => {
+          for (const i of [result.rawBlockID, result.processedBlockID]) {
+            if (!(this.settings.settings.blocks[i-1].extra)) {
+              this.settings.settings.blocks[i-1].extra = {}
+            }
+            if (!(this.settings.settings.blocks[i-1].extra.curtain)) {
+              this.settings.settings.blocks[i-1].extra.curtain = []
+            }
+            this.settings.settings.blocks[i-1].extra.curtain.push(data.body)
+          }
+        })
+      }
+    })
   }
 }

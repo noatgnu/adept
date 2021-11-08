@@ -1,0 +1,33 @@
+<mat-dialog-content>
+  <mat-stepper orientation="vertical">
+    <mat-step>
+      <ng-template matStepLabel>Select Differential Analysis Input</ng-template>
+      <ng-template matStepContent>
+        <mat-form-field>
+          <mat-label>Select output from one Adept block</mat-label>
+          <mat-select (closed)="reformat(false)" [(ngModel)]="processed">
+            <mat-option *ngFor="let b of settings.settings.blocks" [value]="b">
+              {{b.id}}. {{b.title}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-template>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Select Raw Data Block</ng-template>
+      <ng-template matStepContent>
+        <mat-form-field>
+          <mat-label>Select output from one Adept block</mat-label>
+          <mat-select (closed)="reformat(true)" [(ngModel)]="raw">
+            <mat-option *ngFor="let b of settings.settings.blocks" [value]="b">
+              {{b.id}}. {{b.title}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-template>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="accent" [mat-dialog-close]="{data: curtainData, rawBlockID: raw.id, processedBlockID: processed.id}">Submit</button>
+</mat-dialog-actions>

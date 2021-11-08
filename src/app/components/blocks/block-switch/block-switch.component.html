@@ -9,6 +9,12 @@
     <app-filter-column [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Filter'" (parameters)="updateParams($event)"></app-filter-column>
     <app-fuzzy [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Fuzzy'" (parameters)="updateParams($event)"></app-fuzzy>
     <app-set-df-as-current [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Change Current DF'" (parameters)="updateParams($event)"></app-set-df-as-current>
+    <app-correlation-matrix [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Correlation Matrix'" (parameters)="updateParams($event)"></app-correlation-matrix>
+  </div>
+  <div *ngIf="settings.settings.blocks[blockID-1].extra">
+    <mat-chip-list *ngIf="settings.settings.blocks[blockID-1].extra['curtain']">
+      <mat-chip color="primary" *ngFor="let c of settings.settings.blocks[blockID-1].extra['curtain']" (click)="openCurtain(c)">Curtain</mat-chip>
+    </mat-chip-list>
   </div>
 
   <mat-grid-list cols="2" *ngIf="settings.settings.blocks[blockID-1].graphs.length > 0" rowHeight="700">

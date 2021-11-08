@@ -7,7 +7,7 @@
   <span class="spacer"></span>
   <mat-form-field>
     <mat-label>Server URL</mat-label>
-    <input matInput value="localhost:8000" #serverURL (keypress)="updateServerURL($event, serverURL.value)" type="text">
+    <input matInput value="10.202.62.27:8000" #serverURL (keypress)="updateServerURL($event, serverURL.value)" type="text">
   </mat-form-field>
   <button mat-button *ngIf="settings.settings.uniqueID !== ''">{{settings.settings.uniqueID}}</button>
   <button mat-icon-button aria-label="Load Data" (click)="uploadSettingsData(uploadSettings)">
@@ -19,6 +19,7 @@
   <button mat-icon-button aria-label="Adding block" [matMenuTriggerFor]="menu">
     <mat-icon>add</mat-icon>
   </button>
+  <button mat-icon-button color="accent" [matMenuTriggerFor]="extraActions"><mat-icon>build</mat-icon></button>
 </mat-toolbar>
 <mat-drawer-container class="main-page">
   <mat-drawer mode="side" [(opened)]="opened">
@@ -44,5 +45,10 @@
   <button mat-menu-item (click)="addBlock('Fuzzy')">Fuzzy C Mean Clustering</button>
   <button mat-menu-item (click)="addBlock('P-Correction')">P-Value Correction</button>
   <button mat-menu-item (click)="addBlock('Change Current DF')">Change Current DF</button>
+  <button mat-menu-item (click)="addBlock('Correlation Matrix')">Correlation Matrix</button>
+</mat-menu>
+
+<mat-menu #extraActions="matMenu">
+  <button mat-menu-item (click)="openCurtainUploader()">Curtain Data Uploader</button>
 </mat-menu>
 

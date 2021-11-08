@@ -3,6 +3,7 @@ import {Block} from "../../../classes/settings";
 import {DataService} from "../../../services/data.service";
 import {SettingsService} from "../../../services/settings.service";
 import {DataFrame, IDataFrame} from "data-forge";
+import {getChangesForTarget} from "@angular/cdk/schematics";
 
 @Component({
   selector: 'app-block-switch',
@@ -35,6 +36,11 @@ export class BlockSwitchComponent implements OnInit, OnChanges {
   }
 
   updateParams(e: any) {
+
     this.settings.settings.blocks[this.blockID-1].parameters = e
+  }
+
+  openCurtain(c: any) {
+    window.open("http://curtain.proteo.info/#/"+c, "_blank")
   }
 }

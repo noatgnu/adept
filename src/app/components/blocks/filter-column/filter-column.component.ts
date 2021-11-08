@@ -61,6 +61,7 @@ export class FilterColumnComponent implements OnInit {
   }
 
   filterData() {
+    this.ws.activeBlock = this.blockID
     const ws = this.ws.ws.subscribe(data => {
       this.submittedQuery = false
       this.data.updateDataState(this.blockID, data["data"])

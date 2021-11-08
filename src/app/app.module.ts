@@ -47,6 +47,12 @@ import { PCAPlotComponent } from './components/graphs/pca-plot/pca-plot.componen
 import { HeatmapComponent } from './components/graphs/heatmap/heatmap.component';
 import { BlockDeletePromptComponent } from './components/block-delete-prompt/block-delete-prompt.component';
 import { GraphDeletePromptComponent } from './components/graph-delete-prompt/graph-delete-prompt.component';
+import { BarChartComponent } from './components/graphs/bar-chart/bar-chart.component';
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {HttpClientModule} from "@angular/common/http";
+import { CurtainUploaderComponent } from './components/curtain-uploader/curtain-uploader.component';
+import {MatStepperModule} from "@angular/material/stepper";
+import { CorrelationMatrixComponent } from './components/blocks/correlation-matrix/correlation-matrix.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
@@ -71,36 +77,41 @@ PlotlyModule.plotlyjs = PlotlyJS;
     PCAPlotComponent,
     HeatmapComponent,
     BlockDeletePromptComponent,
-    GraphDeletePromptComponent
+    GraphDeletePromptComponent,
+    BarChartComponent,
+    CurtainUploaderComponent,
+    CorrelationMatrixComponent
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatSidenavModule,
-        MatButtonModule,
-        MatCardModule,
-        NgxMatFileInputModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatSelectModule,
-        MatGridListModule,
-        MatListModule,
-        MatToolbarModule,
-        MatTableModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        MatChipsModule,
-        MatProgressBarModule,
-        MatMenuModule,
-        DragDropModule,
-        MatSlideToggleModule,
-        PlotlyModule,
-        MatExpansionModule,
-        MatDialogModule
-    ],
-  providers: [],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatCardModule,
+    NgxMatFileInputModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatSelectModule,
+    MatGridListModule,
+    MatListModule,
+    MatToolbarModule,
+    MatTableModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatChipsModule,
+    MatProgressBarModule,
+    MatMenuModule,
+    DragDropModule,
+    MatSlideToggleModule,
+    PlotlyModule,
+    MatExpansionModule,
+    MatDialogModule,
+    HttpClientModule,
+    MatStepperModule
+  ],
+  providers: [MatSnackBar],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

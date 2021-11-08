@@ -96,6 +96,7 @@ export class StarterComponent implements OnInit {
   }
 
   submitStartingBlock() {
+    this.ws.activeBlock = this.blockID
     this.settings.settings.blockMap[this.blockID].completed = false
     this.submittedQuery = true
     this.settings.settings.primaryIDColumns = this.primaryIdColumns
