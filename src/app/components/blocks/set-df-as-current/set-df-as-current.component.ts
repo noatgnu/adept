@@ -43,21 +43,23 @@ export class SetDfAsCurrentComponent implements OnInit {
 
 
   changeCurrentDF() {
+    if (!this.ws.lock) {
+      if (this.chosenBlockID !== 0) {
+        this.ws.activeBlock = this.blockID
+        const ws = this.ws.ws.subscribe(data => {
+          this.submittedQuery = false
+          this.data.updateDataState(this.blockID, data["data"])
+          this.result = this.data.dfMap[this.blockID]
+          this.ws.lock = false
+          ws.unsubscribe()
+        })
+        this.ws.lock = true
 
-    if (this.chosenBlockID !== 0) {
-      this.ws.activeBlock = this.blockID
-      const ws = this.ws.ws.subscribe(data => {
-        this.submittedQuery = false
-        this.data.updateDataState(this.blockID, data["data"])
-        this.result = this.data.dfMap[this.blockID]
-        ws.unsubscribe()
-      })
-
-      this.parameters.emit({chosenBlockID: this.chosenBlockID})
-      this.ws.changeCurrentDF(this.chosenBlockID)
-      this.submittedQuery = true
+        this.parameters.emit({chosenBlockID: this.chosenBlockID})
+        this.ws.changeCurrentDF(this.chosenBlockID)
+        this.submittedQuery = true
+      }
     }
-
   }
 
   download() {

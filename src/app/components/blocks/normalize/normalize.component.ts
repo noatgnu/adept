@@ -42,34 +42,37 @@ export class NormalizeComponent implements OnInit {
   }
 
   normalizeData() {
-    this.ws.activeBlock = this.blockID
-    const ws = this.ws.ws.subscribe(data => {
-      this.submittedQuery = false
-      this.data.updateDataState(this.blockID, data["data"])
-      this.result = this.data.dfMap[this.blockID]
-      this.experiments = this.settings.settings.experiments
-      for (const c of this.experiments) {
-        const col = this.data.dfMap[this.blockID-1].getSeries(c.name).bake()
-        this.before[c.name] = {}
-        this.after[c.name] = {}
-        this.before[c.name]["mean"] = col.average()
-        this.before[c.name]["median"] = col.median()
-        this.before[c.name]["max"] = col.max()
-        this.before[c.name]["min"] = col.min()
-        const colAfter = this.result.getSeries(c.name).bake()
-        this.after[c.name]["mean"] = colAfter.average()
-        this.after[c.name]["median"] = colAfter.median()
-        this.after[c.name]["max"] = colAfter.max()
-        this.after[c.name]["min"] = colAfter.min()
+    if (!this.ws.lock) {
+      this.ws.activeBlock = this.blockID
+      const ws = this.ws.ws.subscribe(data => {
+        this.submittedQuery = false
+        this.data.updateDataState(this.blockID, data["data"])
+        this.result = this.data.dfMap[this.blockID]
+        this.experiments = this.settings.settings.experiments
+        for (const c of this.experiments) {
+          const col = this.data.dfMap[this.blockID-1].getSeries(c.name).bake()
+          this.before[c.name] = {}
+          this.after[c.name] = {}
+          this.before[c.name]["mean"] = col.average()
+          this.before[c.name]["median"] = col.median()
+          this.before[c.name]["max"] = col.max()
+          this.before[c.name]["min"] = col.min()
+          const colAfter = this.result.getSeries(c.name).bake()
+          this.after[c.name]["mean"] = colAfter.average()
+          this.after[c.name]["median"] = colAfter.median()
+          this.after[c.name]["max"] = colAfter.max()
+          this.after[c.name]["min"] = colAfter.min()
 
-      }
-      console.log(this.before)
-      console.log(this.after)
-      ws.unsubscribe()
-    })
-    this.submittedQuery = true
-    this.parameters.emit({chosenMethod: this.chosenMethod})
-    this.ws.normalizeData(this.chosenMethod)
+        }
+        this.ws.lock = false
+        ws.unsubscribe()
+      })
+      this.ws.lock = true
+      this.submittedQuery = true
+      this.parameters.emit({chosenMethod: this.chosenMethod})
+      this.ws.normalizeData(this.chosenMethod)
+    }
+
   }
 
   download() {

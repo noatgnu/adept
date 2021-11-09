@@ -54,17 +54,21 @@ export class PCorrectionComponent implements OnInit {
 
 
   correctData() {
-    this.ws.activeBlock = this.blockID
-    const ws = this.ws.ws.subscribe(data => {
-      this.submittedQuery = false
-      this.data.updateDataState(this.blockID, data["data"])
-      this.result = this.data.dfMap[this.blockID]
-      ws.unsubscribe()
-    })
+    if (!this.ws.lock) {
+      this.ws.activeBlock = this.blockID
+      const ws = this.ws.ws.subscribe(data => {
+        this.submittedQuery = false
+        this.data.updateDataState(this.blockID, data["data"])
+        this.result = this.data.dfMap[this.blockID]
+        this.ws.lock = false
+        ws.unsubscribe()
+      })
+      this.ws.lock = true
 
-    this.parameters.emit({chosenMethod: this.chosenMethod, pCutOff: this.pCutOff})
-    this.ws.correctData(this.chosenMethod, this.pCutOff)
-    this.submittedQuery = true
+      this.parameters.emit({chosenMethod: this.chosenMethod, pCutOff: this.pCutOff})
+      this.ws.correctData(this.chosenMethod, this.pCutOff)
+      this.submittedQuery = true
+    }
   }
 
   download() {

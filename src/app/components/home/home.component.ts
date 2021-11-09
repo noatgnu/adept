@@ -20,27 +20,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   routeSub: Subscription = new Subscription()
   constructor(private ws: WebsocketService, public settings: SettingsService, private data: DataService, private snack: MatSnackBar, private route: ActivatedRoute) {
     const a = this.ws.ws.subscribe(data => {
-      console.log(data)
       a.unsubscribe()
       this.routeSub = this.route.params.subscribe(params => {
         if (params) {
-          console.log(params)
           if (params["settings"]) {
             const ws = this.ws.ws.subscribe(data => {
-              console.log(data)
               if (data["data"]) {
                 const jsonData: ExportData = JSON.parse(data["data"]);
                 for (const l in jsonData.data) {
                   jsonData.data[l] = fromJSON(jsonData.data[l])
                 }
-
                 this.data.updateDFmap(jsonData.data)
                 this.settings.settings = jsonData.settings
                 this.settings.settings.uniqueID = data["id"]
-
                 this.settings.settingsUpdated()
               }
-
               ws.unsubscribe()
             })
             this.ws.LoadSaved(params["settings"])

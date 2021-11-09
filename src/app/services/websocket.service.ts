@@ -8,6 +8,16 @@ import {SettingsService} from "./settings.service";
   providedIn: 'root'
 })
 export class WebsocketService {
+  get lock(): boolean {
+    return this._lock;
+  }
+
+  set lock(value: boolean) {
+    this._lock = value;
+  }
+  private _lock: boolean = false
+
+
   get activeBlock(): number {
     return this._activeBlock;
   }

@@ -61,17 +61,20 @@ export class FilterColumnComponent implements OnInit {
   }
 
   filterData() {
-    this.ws.activeBlock = this.blockID
-    const ws = this.ws.ws.subscribe(data => {
-      this.submittedQuery = false
-      this.data.updateDataState(this.blockID, data["data"])
-      this.result = this.data.dfMap[this.blockID]
-      ws.unsubscribe()
-    })
-    this.parameters.emit({filterSteps: this.filterSteps})
-    this.ws.filterData(this.filterSteps)
-    this.submittedQuery = true
-
+    if (!this.ws.lock) {
+      this.ws.activeBlock = this.blockID
+      const ws = this.ws.ws.subscribe(data => {
+        this.submittedQuery = false
+        this.data.updateDataState(this.blockID, data["data"])
+        this.result = this.data.dfMap[this.blockID]
+        this.ws.lock = false
+        ws.unsubscribe()
+      })
+      this.ws.lock = true
+      this.parameters.emit({filterSteps: this.filterSteps})
+      this.ws.filterData(this.filterSteps)
+      this.submittedQuery = true
+    }
   }
 
   download() {

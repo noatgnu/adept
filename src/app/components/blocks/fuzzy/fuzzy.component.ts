@@ -38,16 +38,21 @@ export class FuzzyComponent implements OnInit {
 
 
   fuzzyClusterData() {
-    this.ws.activeBlock = this.blockID
-    const ws = this.ws.ws.subscribe(data => {
-      this.submittedQuery = false
-      this.data.updateDataState(this.blockID, data["data"])
-      this.result = this.data.currentDF
-      ws.unsubscribe()
-    })
-    this.submittedQuery = true
-    this.parameters.emit({membershipThreshold: this.membershipThreshold})
-    this.ws.fuzzyClusterData(this.membershipThreshold)
+    if (!this.ws.lock) {
+      this.ws.activeBlock = this.blockID
+      const ws = this.ws.ws.subscribe(data => {
+        this.submittedQuery = false
+        this.data.updateDataState(this.blockID, data["data"])
+        this.result = this.data.currentDF
+        this.ws.lock = false
+        ws.unsubscribe()
+      })
+      this.ws.lock = true
+      this.submittedQuery = true
+      this.parameters.emit({membershipThreshold: this.membershipThreshold})
+      this.ws.fuzzyClusterData(this.membershipThreshold)
+    }
+
   }
 
   download() {

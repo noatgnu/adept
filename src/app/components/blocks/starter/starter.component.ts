@@ -96,23 +96,29 @@ export class StarterComponent implements OnInit {
   }
 
   submitStartingBlock() {
-    this.ws.activeBlock = this.blockID
-    this.settings.settings.blockMap[this.blockID].completed = false
-    this.submittedQuery = true
-    this.settings.settings.primaryIDColumns = this.primaryIdColumns
-    this.settings.settings.experiments = this.sampleData
-    this.settings.settings.starterFileColumns = this._df.getColumnNames()
-    this.getID = this.ws.ws.subscribe(data => {
-      if (data["origin"] == "request-id") {
-        this.settings.settings.uniqueID = data["id"]
-        this.ws.sendStarter(this._df.toJSON())
-      } else if (data["origin"] == "upload-starter") {
-        this.submittedQuery = false
-        this.data.updateDataState(this.blockID, data["data"])
-        this.getID?.unsubscribe()
-      }
-    })
-    this.ws.requestID()
+    if (!this.ws.lock) {
+      this.ws.activeBlock = this.blockID
+      this.settings.settings.blockMap[this.blockID].completed = false
+      this.submittedQuery = true
+      this.settings.settings.primaryIDColumns = this.primaryIdColumns
+      this.settings.settings.experiments = this.sampleData
+      this.settings.settings.starterFileColumns = this._df.getColumnNames()
+      this.getID = this.ws.ws.subscribe(data => {
+        if (data["origin"] == "request-id") {
+          this.settings.settings.uniqueID = data["id"]
+          this.ws.sendStarter(this._df.toJSON())
+        } else if (data["origin"] == "upload-starter") {
+          this.submittedQuery = false
+          this.data.updateDataState(this.blockID, data["data"])
+          this.ws.lock = false
+          this.getID?.unsubscribe()
+        }
+      })
+      this.ws.lock = true
+
+      this.ws.requestID()
+    }
+
   }
 
   dropTable(event: CdkDragDrop<Experiment[]>) {

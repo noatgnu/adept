@@ -44,16 +44,21 @@ export class AnovaComponent implements OnInit {
   }
 
   compareData() {
-    this.ws.activeBlock = this.blockID
-    const ws = this.ws.ws.subscribe(data => {
-      this.submittedQuery = false
-      this.data.updateDataState(this.blockID, data["data"])
-      this.result = this.data.dfMap[this.blockID]
-      ws.unsubscribe()
-    })
-    this.parameters.emit({selected: this.selected})
-    this.ws.anova(this.selected)
-    this.submittedQuery = true
+    if (!this.ws.lock) {
+      this.ws.activeBlock = this.blockID
+      const ws = this.ws.ws.subscribe(data => {
+        this.submittedQuery = false
+        this.data.updateDataState(this.blockID, data["data"])
+        this.result = this.data.dfMap[this.blockID]
+        this.ws.lock = false
+        ws.unsubscribe()
+      })
+      this.ws.lock = true
+      this.parameters.emit({selected: this.selected})
+      this.ws.anova(this.selected)
+      this.submittedQuery = true
+    }
+
 
   }
 
