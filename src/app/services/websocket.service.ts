@@ -67,6 +67,10 @@ export class WebsocketService {
     this.ws.next(new WebSocketMessageEvent("TTest", JSON.stringify(comparisons), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID, this.activeBlock))
   }
 
+  limmaData(comparisons: any[]) {
+    this.ws.next(new WebSocketMessageEvent("Limma", JSON.stringify(comparisons), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID, this.activeBlock))
+  }
+
   correctData(method: string, cutoff: number) {
     this.ws.next(new WebSocketMessageEvent(method, cutoff.toString(), "",  JSON.stringify(this.settings.settings), this.settings.settings.uniqueID, this.activeBlock))
   }

@@ -10,6 +10,7 @@
     <app-fuzzy [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Fuzzy'" (parameters)="updateParams($event)"></app-fuzzy>
     <app-set-df-as-current [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Change Current DF'" (parameters)="updateParams($event)"></app-set-df-as-current>
     <app-correlation-matrix [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Correlation Matrix'" (parameters)="updateParams($event)"></app-correlation-matrix>
+    <app-limma [blockID]="settings.settings.blocks[blockID-1].id" *ngSwitchCase="'Limma'" (parameters)="updateParams($event)"></app-limma>
   </div>
   <div *ngIf="settings.settings.blocks[blockID-1].extra">
     <mat-chip-list *ngIf="settings.settings.blocks[blockID-1].extra['curtain']">

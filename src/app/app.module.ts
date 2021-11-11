@@ -55,6 +55,7 @@ import {MatStepperModule} from "@angular/material/stepper";
 import { CorrelationMatrixComponent } from './components/blocks/correlation-matrix/correlation-matrix.component';
 import {AppRoutingModule} from "./app-routing.module";
 import { HomeComponent } from './components/home/home.component';
+import { LimmaComponent } from './components/blocks/limma/limma.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     BarChartComponent,
     CurtainUploaderComponent,
     CorrelationMatrixComponent,
-    HomeComponent
+    HomeComponent,
+    LimmaComponent
   ],
   imports: [
     AppRoutingModule,

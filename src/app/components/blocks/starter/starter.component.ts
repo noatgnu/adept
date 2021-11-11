@@ -86,13 +86,14 @@ export class StarterComponent implements OnInit {
   }
 
   setSampleData() {
-    this.sampleData = []
-    this.tempSampleData = []
-    for (const c of this.sampleColumns) {
-      this.sampleData.push({name: c, condition: c})
-      this.tempSampleData.push({name: c, condition: c})
+    if (this.sampleColumns.length > 0) {
+      this.sampleData = []
+      this.tempSampleData = []
+      for (const c of this.sampleColumns) {
+        this.sampleData.push({name: c, condition: c})
+        this.tempSampleData.push({name: c, condition: c})
+      }
     }
-
   }
 
   submitStartingBlock() {

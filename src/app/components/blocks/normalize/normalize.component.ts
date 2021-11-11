@@ -23,12 +23,13 @@ export class NormalizeComponent implements OnInit {
   get blockID(): number {
     return this._blockID
   }
-  methods: string[] = ["Mean", "Median", "Z-Score Row", "Z-Score Column"]
+  methods: string[] = ["Mean", "Median", "Z-Score Row", "Z-Score Column", "Quantile"]
   description: any = {
     "Mean": "Perform normalization to center data around sample's mean",
     "Median": "Perform normalization to center data around sample's median",
     "Z-Score Row": "Perform normalization row-wise. Firstly, rows are normalized by their mean then divided by their standard deviation",
     "Z-Score Column": "Perform normalization column-wise. Firstly, columns are normalized by their mean then divided by their standard deviation",
+    "Quantile": "Perform normalization based on rank of the value and mean of values with the same rank.",
   }
   chosenMethod = "Median"
   submittedQuery = false

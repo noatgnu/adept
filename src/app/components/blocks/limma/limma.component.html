@@ -1,0 +1,56 @@
+<mat-card class="container">
+  <mat-card-header>
+    <mat-card-title>Limma</mat-card-title>
+    <span class="spacer"></span>
+    <button mat-icon-button color="warn" (click)="delete()"><mat-icon>delete</mat-icon></button>
+  </mat-card-header>
+  <mat-grid-list cols="4" rowHeight="100" *ngIf="conditions.length > 0">
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-label>Condition A</mat-label>
+        <mat-select [(ngModel)]="selectedA" >
+          <mat-option *ngFor="let col of conditions" [value]="col">
+            {{col}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field>
+        <mat-label>Condition B</mat-label>
+        <mat-select [(ngModel)]="selectedB">
+          <mat-option *ngFor="let col of conditions" [value]="col">
+            {{col}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <button mat-raised-button (click)="addComparison()">Add Comparisons</button>
+  <table #table  mat-table [dataSource]="comparisons" class="mat-elevation-z8" *ngIf="comparisons.length > 0" style="margin-left: auto; margin-right: auto">
+    <ng-container matColumnDef="conditionA">
+      <th mat-header-cell *matHeaderCellDef>Condition A </th>
+      <td mat-cell *matCellDef="let r">
+        {{r.A}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="conditionB">
+      <th mat-header-cell *matHeaderCellDef>Condition B </th>
+      <td mat-cell *matCellDef="let r">
+        {{r.B}}
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['conditionA', 'conditionB']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['conditionA', 'conditionB'];"></tr>
+  </table>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="compareData()" style="margin-right: 10px">Submit</button>
+    <button mat-raised-button color="primary" (click)="ViewInputData()" style="margin-right: 10px">View Sample Of Input Data</button>
+    <app-add-graph-button [id]="blockID" *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"></app-add-graph-button>
+    <button mat-raised-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" color="accent" (click)="download()" style="margin-right: 10px">Download CSV</button>
+    <button mat-icon-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"><mat-icon color="primary">check_circle</mat-icon></button>
+  </mat-card-actions>
+  <mat-card-footer>
+    <mat-progress-bar mode="query" *ngIf="submittedQuery"></mat-progress-bar>
+  </mat-card-footer>
+</mat-card>
