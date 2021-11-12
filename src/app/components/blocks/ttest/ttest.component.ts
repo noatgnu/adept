@@ -67,7 +67,7 @@ export class TtestComponent implements OnInit {
       this.ws.lock = true
 
       this.parameters.emit({comparisons: this.comparisons})
-      this.ws.limmaData(this.comparisons)
+      this.ws.ttestData(this.comparisons)
       this.submittedQuery = true
     }
   }

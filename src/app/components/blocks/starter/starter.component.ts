@@ -8,6 +8,7 @@ import {WebsocketService} from "../../../services/websocket.service";
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import {MatTable} from "@angular/material/table";
 import {DataService} from "../../../services/data.service";
+import {Event} from "@angular/router";
 
 @Component({
     selector: 'app-starter',
@@ -19,7 +20,29 @@ export class StarterComponent implements OnInit {
     console.log(this._df)
     return this._df;
   }
+  shift: boolean = false
+  holdShift(e: any) {
+    this.shift = true
+  }
+  previousClickColumns: number = 0
+  releaseShift(e: any) {
+    this.shift = false
+  }
 
+  clickColumn(colIndex: number) {
+    if (this.shift) {
+      const columns: string[] = []
+      if (this.previousClickColumns !== 0) {
+        for (let i = this.previousClickColumns; i <= colIndex; i ++) {
+          columns.push(this.columns[i])
+        }
+        this.sampleColumns = columns
+      }
+
+    }
+    this.previousClickColumns = colIndex
+    console.log(this.sampleColumns)
+  }
 
   @ViewChild('table') table: MatTable<Experiment>|undefined;
   _blockID: number = 0
@@ -51,11 +74,25 @@ export class StarterComponent implements OnInit {
   loadedFile: boolean = false
   constructor(public settings: SettingsService, private ws: WebsocketService, private data: DataService, private cd: ChangeDetectorRef) {
     this.fileInput = new FormControl(Validators.required);
-
+    this.settings.newSettingsLoaded.asObservable().subscribe(result => {
+      if (result) {
+        this.sampleColumns = []
+        for (const e of this.settings.settings.experiments) {
+          this.sampleColumns.push(e.name)
+        }
+      }
+    })
   }
 
   ngOnInit(): void {
 
+  }
+
+  clearSelection() {
+    this.sampleColumns = []
+    this.settings.settings.experiments = []
+    this.sampleData = []
+    this.previousClickColumns = 0
   }
 
   updateConditionList() {
@@ -103,6 +140,7 @@ export class StarterComponent implements OnInit {
       this.submittedQuery = true
       this.settings.settings.primaryIDColumns = this.primaryIdColumns
       this.settings.settings.experiments = this.sampleData
+
       this.settings.settings.starterFileColumns = this._df.getColumnNames()
       this.getID = this.ws.ws.subscribe(data => {
         if (data["origin"] == "request-id") {

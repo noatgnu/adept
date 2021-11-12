@@ -25,12 +25,13 @@
     <mat-grid-tile>
       <mat-form-field>
         <mat-label>Sample columns</mat-label>
-        <mat-select multiple [(ngModel)]="sampleColumns" (closed)="setSampleData()">
-          <mat-option *ngFor="let col of columns" [value]="col">
+        <mat-select multiple [(ngModel)]="sampleColumns" (closed)="setSampleData()" (keydown.shift)="holdShift($event)" (keyup.shift)="releaseShift($event)">
+          <mat-option *ngFor="let col of columns; let i = index" [value]="col" (click)="clickColumn(i)">
             {{col}}
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <button mat-icon-button color="warn" (click)="clearSelection()"><mat-icon>restart_alt</mat-icon></button>
     </mat-grid-tile>
   </mat-grid-list>
   <table #table

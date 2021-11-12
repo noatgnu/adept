@@ -37,7 +37,7 @@ export class VolcanoPlotComponent implements OnInit {
     return this._blockID
   }
   _graph: Graph = {id: 0, name: "", parameters: undefined, parentBlockID: 0}
-
+  yaxis: string = "p-value"
   @Input() set graph(value: Graph) {
     this._graph = value
     console.log(this._graph)
@@ -61,6 +61,7 @@ export class VolcanoPlotComponent implements OnInit {
   pCutOff: number = 0.05
   comparisons: string[] = []
   chosenComparison: string = ""
+  pValueColumns: string[] = ["p-value", "adj.p-value"]
   constructor(private data: DataService, private settings: SettingsService, private ws: WebsocketService, private plotly: PlotlyService) {
     this.data.updateParametersSubject.asObservable().subscribe(data => {
       if (data["id"] === this.blockID && data["id"] === data["origin"]) {
@@ -76,7 +77,7 @@ export class VolcanoPlotComponent implements OnInit {
     })
   }
 
-  drawData() {
+  drawData(yaxis: string = "") {
 
     this.result = []
     const temp: any = {}
@@ -86,10 +87,16 @@ export class VolcanoPlotComponent implements OnInit {
         primaryIDList.push(r[c])
       }
       const primaryID = primaryIDList.join(";")
-      let pColumn = "p-value"
-      if (this.df.getColumnNames().includes("adj.p-value")) {
-        pColumn = "adj.p-value"
+
+      let pColumn = yaxis
+      if (pColumn === "") {
+        pColumn = this.yaxis
+        if (this.df.getColumnNames().includes("adj.p-value")) {
+          pColumn = "adj.p-value"
+          this.yaxis = pColumn
+        }
       }
+
       let pValue = undefined
       if (r[pColumn] !== null) {
         pValue = parseFloat(r[pColumn])

@@ -110,9 +110,7 @@ export class HeatmapComponent implements OnInit {
       y: [],
       type: 'heatmap',
     }
-    console.log(experiments)
     for (const c of this.df.getColumnNames()) {
-      console.log(c)
       if (experiments.includes(c)) {
         temp.x.push(c)
         if (this.showAllTicks) {

@@ -62,13 +62,14 @@ export class LimmaComponent implements OnInit {
         this.submittedQuery = false
         this.data.updateDataState(this.blockID, data["data"])
         this.result = this.data.dfMap[this.blockID]
+        console.log(data)
         this.ws.lock = false
         ws.unsubscribe()
       })
       this.ws.lock = true
 
       this.parameters.emit({comparisons: this.comparisons})
-      this.ws.ttestData(this.comparisons)
+      this.ws.limmaData(this.comparisons)
       this.submittedQuery = true
     }
   }
