@@ -49,7 +49,15 @@
       <td mat-cell *matCellDef="let r">{{r.name}}</td>
     </ng-container>
     <ng-container matColumnDef="condition">
-      <th mat-header-cell *matHeaderCellDef>Sample condition <button mat-flat-button style="margin-left: 50px" (click)="parseConditions()">Parse Condition</button></th>
+      <th mat-header-cell *matHeaderCellDef>
+        Sample condition
+
+        <button mat-flat-button style="margin-left: 100px; margin-right: 5px" (click)="parseConditions()">Parse Condition</button>
+        <mat-form-field>
+          <mat-label>Sample Condition Parsing Regex</mat-label>
+          <input matInput [(ngModel)]="conditionParsePattern" type="text">
+        </mat-form-field>
+      </th>
       <td mat-cell *matCellDef="let r">
         <mat-form-field>
           <input type="text" matInput [(ngModel)]="r.condition" [matAutocomplete]="auto" (focusout)="updateConditionList()">
@@ -66,7 +74,6 @@
   </table>
   <mat-card-actions>
     <button mat-raised-button color="primary" *ngIf="sampleData.length > 0" (click)="submitStartingBlock()" style="margin-right: 10px">Submit</button>
-
     <app-add-graph-button [id]="blockID"></app-add-graph-button>
     <button mat-raised-button color="primary" *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed" (click)="ViewInputData()" style="margin-right: 10px">View Sample Of Input Data</button>
     <button mat-icon-button *ngIf="blockID !== 0 && settings.settings.blockMap[blockID].completed"><mat-icon color="primary">check_circle</mat-icon></button>

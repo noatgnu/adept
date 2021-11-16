@@ -104,6 +104,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.snack.open("Server backend link has been updated: " + this.ws.baseUrl, "", {duration: 5000})
     }
   }
+
   @HostListener('window:beforeunload')
   async ngOnDestroy() {
     this.routeSub.unsubscribe()

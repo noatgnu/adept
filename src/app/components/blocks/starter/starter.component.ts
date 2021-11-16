@@ -44,6 +44,8 @@ export class StarterComponent implements OnInit {
     console.log(this.sampleColumns)
   }
 
+  conditionParsePattern = /(\w+)\.(\d+)$/
+
   @ViewChild('table') table: MatTable<Experiment>|undefined;
   _blockID: number = 0
   @Input() set blockID(value: number) {
@@ -173,7 +175,7 @@ export class StarterComponent implements OnInit {
   }
 
   parseConditions() {
-    const pattern = new RegExp(/(\w+)\.(\d+)$/)
+    const pattern = new RegExp(this.conditionParsePattern)
     for (const e of this.sampleData) {
       const match = e.name.match(pattern)
       if (match) {
