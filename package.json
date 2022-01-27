@@ -24,7 +24,7 @@
     "@angular/router": "~12.2.0",
     "angular-google-charts": "^2.2.2",
     "angular-plotly.js": "^4.0.4",
-    "data-forge": "^1.8.17",
+    "data-forge": "^1.9.1",
     "plotly.js-dist-min": "^2.5.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
